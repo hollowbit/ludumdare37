@@ -10,15 +10,10 @@ public class ld_entity
 		this.w = w;
 		this.h = h;
 	}
-	public boolean isIn(ld_entity other)
-	{
-		if (other.x >= this.x+this.w &&
-			other.x + other.w <= this.x &&
-			other.y >= this.y+this.h &&
-			other.y + other.h <= this.y){
-			return true;
+	public boolean isIn(ld_entity rect){
+		if (rect.x <= this.x + this.w && rect.x + rect.w >= this.x &&
+				rect.y <= this.y + this.h && rect.y + rect.h >= this.y	)
+				return true;
+			return false;
 		}
-		return false;
-			
-	}
 }

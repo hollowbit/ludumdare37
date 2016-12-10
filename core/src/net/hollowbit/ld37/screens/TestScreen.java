@@ -31,8 +31,11 @@ public class TestScreen extends ScreenAdapter {
 		super.show();
 	}
 	
+	
 	@Override
 	public void render (float delta) {
+		testGame.update(delta);
+		testGame.readKeys();
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();

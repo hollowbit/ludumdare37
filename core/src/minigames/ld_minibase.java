@@ -24,7 +24,7 @@ public abstract class ld_minibase extends ld_entity
 	public void render(SpriteBatch batch){		//To be overwritten
 		return;
 	}
-	public void update(){					//To be overwritten
+	public void update(float delta){					//To be overwritten
 		return;
 	}
 	
