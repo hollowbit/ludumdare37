@@ -2,11 +2,8 @@ package minigames;
 
 public class ld_entity
 {
-	public int x;
-	public int y;
-	public int w;
-	public int h;
-	public ld_entity(int x, int y, int w, int h)
+	public double x, y, w, h;
+	public ld_entity(double x, double y, double w, double h)
 	{
 		this.x = x;
 		this.y = y;
