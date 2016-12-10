@@ -19,11 +19,7 @@ public abstract class ld_minibase extends ld_entity
 	public void drawBgrnd(SpriteBatch batch){			
 		batch.draw(this.bgrnd,
 				(int)this.x,
-				(int)this.y,
-				32,
-				32,
-				(int)this.w,
-				(int)this.h,1,1);
+				(int)this.y);
 	}
 	public void render(SpriteBatch batch){		//To be overwritten
 		return;

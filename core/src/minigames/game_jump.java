@@ -32,39 +32,10 @@ public class game_jump extends ld_minibase {
 	@Override
 	public void render(SpriteBatch batch){
 		super.drawBgrnd(batch);
-		
+		batch.draw(character, (float)ent_char.x, (float)ent_char.y, (float)ent_char.w,(float) ent_char.h);
+		batch.draw(floor, (float)ent_floor.x, (float)ent_floor.y, (float)ent_floor.w, (float)ent_floor.h);
 		batch.draw(saw, (float)ent_saw1.x, (float)ent_saw1.y, (float)ent_saw1.w, (float)ent_saw1.h);
 		batch.draw(saw, (float)ent_saw2.x, (float)ent_saw2.y, (float)ent_saw2.w, (float)ent_saw2.h);
-		batch.draw(floor,
-				(float)ent_floor.x,
-				(float)ent_floor.y,
-				(float)ent_floor.w/2,
-				(float)ent_floor.h/2,
-				(float)ent_floor.w,
-				(float)ent_floor.h,
-				1,
-				1,
-				90,
-				0,
-				0,
-				64,
-				64,
-				false, false);
-		batch.draw(character,
-				(float)ent_char.x,
-				(float)ent_char.y,
-                4,
-                4,
-                (float)ent_char.w,
-                (float)ent_char.h,
-                1,
-                1,
-                90,
-                0,
-                0,
-                64,
-                64,
-                false,false);
 	}
 	
 	@Override
