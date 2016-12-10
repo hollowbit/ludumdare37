@@ -1,20 +1,31 @@
 package net.hollowbit.ld37;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import net.hollowbit.ld37.screens.MainMenuScreen;
+import net.hollowbit.ld37.screens.RoomScreen;
 
 public class Ld37Game extends Game {
 	
 	SpriteBatch batch;
-	Texture img;
+	AssetManager assetManager;
+	BitmapFont font;
 	
 	@Override
 	public void create () {
+		game = this;
 		batch = new SpriteBatch();
-		this.setScreen(new MainMenuScreen(batch));
+		
+		assetManager = new AssetManager();
+		this.loadAssets();
+		assetManager.finishLoading();
+		
+		font = new BitmapFont();
+		
+		this.setScreen(new RoomScreen(batch));
 	}
 
 	@Override
@@ -26,6 +37,27 @@ public class Ld37Game extends Game {
 	public void dispose () {
 		super.dispose();
 		batch.dispose();
-		img.dispose();
+		assetManager.dispose();
 	}
+	
+	public AssetManager getAssetManager () {
+		return assetManager;
+	}
+	
+	public BitmapFont getFont () {
+		return font;
+	}
+	
+	private void loadAssets () {
+		//Images
+		assetManager.load("badlogic.jpg", Texture.class);
+		assetManager.load("blank.png", Texture.class);
+	}
+	
+	
+	private static Ld37Game game;
+	public static Ld37Game getGame() {
+		return game;
+	}
+	
 }
