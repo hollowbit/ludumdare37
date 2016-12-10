@@ -7,8 +7,8 @@ import net.hollowbit.ld37.Ld37Game;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 800;
-		config.height = 600;
+		config.width = 1200;
+		config.height = 1200;
 		config.vSyncEnabled = false;
 		config.foregroundFPS = 0;
 		config.backgroundFPS = 0;
