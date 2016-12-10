@@ -19,7 +19,7 @@ public class TestScreen extends ScreenAdapter {
 	private int WALL_H  = 1024, WALL_W = 1024;
 	private int TEX_R = 64;
 	private int R = WALL_H/TEX_R;
-	private game_jump testGame = new game_jump(R*6,R*7,R*52,R*52);
+	private game_jump testGame = new game_jump(WALL_H,R*6,R*7,R*52,R*52);
 	public TestScreen (SpriteBatch batch) {
 		blank = new Texture("tv_a.png");
 		this.batch = batch;

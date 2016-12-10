@@ -1,8 +1,14 @@
 package net.hollowbit.ld37.walls;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 public class FloorWall extends Wall {
+
+	public FloorWall(Vector3 dir) {
+		super(dir);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public void update (float delta) {

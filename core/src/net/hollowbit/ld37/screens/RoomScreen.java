@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector3;
 
 import net.hollowbit.ld37.Ld37Game;
 import net.hollowbit.ld37.walls.CeilingWall;
@@ -65,13 +66,13 @@ public class RoomScreen extends ScreenAdapter {
 		
 		//Initialize walls
 		walls = new Wall[6];
-		walls[0] = new MainMenuWall();
-		walls[1] = new GameWall();
-		walls[4] = new OptionsWall();
-		walls[5] = new CreditsWall();
+		walls[0] = new MainMenuWall(new Vector3(1,0,0));
+		walls[1] = new GameWall(new Vector3(1,0,0));
+		walls[4] = new OptionsWall(new Vector3(-1,0,0));
+		walls[5] = new CreditsWall(new Vector3(1,0,0));
 		
-		walls[2] = new FloorWall();//Width and height are both width because 3d!
-		walls[3] = new CeilingWall();// ^
+		walls[2] = new FloorWall(new Vector3(0,-1,0));//Width and height are both width because 3d!
+		walls[3] = new CeilingWall(new Vector3(0,-1,0));// ^
 		
 		CameraInputController camController = new CameraInputController(cam);
 		Gdx.input.setInputProcessor(camController);

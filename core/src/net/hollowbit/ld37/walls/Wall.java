@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import net.hollowbit.ld37.Ld37Game;
@@ -23,11 +24,12 @@ public abstract class Wall {
 	protected Texture blank;
 	protected Texture[] textures = new Texture[]{new Texture("tv_a.png"),new Texture("menu.png"),new Texture("options.png"),new Texture("purp_b.png"),new Texture("purp_b.png"),new Texture("purp_b.png")};
 	
-	public Wall () { 
+	public Wall (Vector3 dir) { 
 		fbo = new FrameBuffer(Format.RGBA8888, FBO_SIZE, FBO_SIZE, false);
 		cam = new OrthographicCamera(SIZE, SIZE);
 		
 		cam.translate(SIZE / 2, SIZE / 2);
+		cam.up.set(dir);
 		cam.update();
 		
 		blank = Ld37Game.getGame().getAssetManager().get("blank.png", Texture.class);

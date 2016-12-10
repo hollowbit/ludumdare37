@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import net.hollowbit.ld37.screens.TestScreen;
+import net.hollowbit.ld37.screens.RoomScreen;
 
 public class Ld37Game extends Game {
 	
@@ -25,7 +25,7 @@ public class Ld37Game extends Game {
 		
 		font = new BitmapFont();
 		
-		this.setScreen(new TestScreen(batch));
+		this.setScreen(new RoomScreen(batch));
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class game_jump extends ld_minibase {
+	public int TEX_R = 64;
+	public int R;
 	public Texture character = new Texture("games/character.png");
 	public Texture floor = new Texture("games/floor.png");
 	public Texture saw = new Texture("games/saw.png");
@@ -16,8 +18,9 @@ public class game_jump extends ld_minibase {
 	public int timer = 0;
 	public int maxTime = 5000;
 	
-	public game_jump(int x, int y, int w, int h){
+	public game_jump(int size,int x, int y, int w, int h){
 		super(x,y,w,h);
+		this.R = size/TEX_R;
 		ent_char = new ld_entity(this.x+this.w/2,this.y+12*R,7*R,7*R);
 		ent_floor = new ld_entity(this.x,this.y,this.w,11*R);
 		ent_saw1 = new ld_entity(this.x+3*R,this.y+11*R,11*R,6*R);
@@ -29,10 +32,39 @@ public class game_jump extends ld_minibase {
 	@Override
 	public void render(SpriteBatch batch){
 		super.drawBgrnd(batch);
-		batch.draw(character, (float)ent_char.x, (float)ent_char.y, (float)ent_char.w,(float) ent_char.h);
-		batch.draw(floor, (float)ent_floor.x, (float)ent_floor.y, (float)ent_floor.w, (float)ent_floor.h);
+		
 		batch.draw(saw, (float)ent_saw1.x, (float)ent_saw1.y, (float)ent_saw1.w, (float)ent_saw1.h);
 		batch.draw(saw, (float)ent_saw2.x, (float)ent_saw2.y, (float)ent_saw2.w, (float)ent_saw2.h);
+		batch.draw(floor,
+				(float)ent_floor.x,
+				(float)ent_floor.y,
+				(float)ent_floor.w/2,
+				(float)ent_floor.h/2,
+				(float)ent_floor.w,
+				(float)ent_floor.h,
+				1,
+				1,
+				90,
+				0,
+				0,
+				64,
+				64,
+				false, false);
+		batch.draw(character,
+				(float)ent_char.x,
+				(float)ent_char.y,
+                4,
+                4,
+                (float)ent_char.w,
+                (float)ent_char.h,
+                1,
+                1,
+                90,
+                0,
+                0,
+                64,
+                64,
+                false,false);
 	}
 	
 	@Override
