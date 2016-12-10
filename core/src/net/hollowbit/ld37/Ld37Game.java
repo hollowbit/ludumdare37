@@ -1,7 +1,6 @@
 package net.hollowbit.ld37;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import net.hollowbit.ld37.screens.MainMenuScreen;
@@ -9,7 +8,6 @@ import net.hollowbit.ld37.screens.MainMenuScreen;
 public class Ld37Game extends Game {
 	
 	SpriteBatch batch;
-	Texture img;
 	
 	@Override
 	public void create () {
@@ -26,6 +24,5 @@ public class Ld37Game extends Game {
 	public void dispose () {
 		super.dispose();
 		batch.dispose();
-		img.dispose();
 	}
 }
