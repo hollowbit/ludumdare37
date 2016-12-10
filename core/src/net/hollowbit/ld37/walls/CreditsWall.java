@@ -15,7 +15,7 @@ public class CreditsWall extends Wall {
 	}
 
 	@Override
-	public void render (SpriteBatch batch) {
+	protected void render (SpriteBatch batch) {
 		batch.setColor(0f, 1, 0.5f, 1);
 		batch.draw(blank, 0, 0, width, height);
 	}

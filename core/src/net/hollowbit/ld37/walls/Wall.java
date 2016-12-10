@@ -1,7 +1,10 @@
 package net.hollowbit.ld37.walls;
 
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
 
 import net.hollowbit.ld37.Ld37Game;
@@ -15,6 +18,7 @@ public abstract class Wall {
 	protected Vector3 rotation;
 	protected int width;
 	protected int height;
+	protected FrameBuffer fbo;
 	
 	protected Texture blank;
 	
@@ -24,12 +28,31 @@ public abstract class Wall {
 		this.width = width;
 		this.height = height;
 		
+		this.fbo = new FrameBuffer(Format.RGBA8888, width, height, false);
+		
 		blank = Ld37Game.getGame().getAssetManager().get("blank.png", Texture.class);
 	}
 	
 	public abstract void update (float delta);
-	public abstract void render (SpriteBatch batch);
+	protected abstract void render (SpriteBatch batch);
 	public abstract void dispose ();
+	
+	/**
+	 * Returns the texture for the current frame
+	 * @param batch
+	 * @return
+	 */
+	public TextureRegion getTexture (SpriteBatch batch) {
+		fbo.begin();
+		batch.begin();
+		render(batch);
+		batch.end();
+		fbo.end();
+		
+		TextureRegion fboTexture = new TextureRegion(fbo.getColorBufferTexture());
+		fboTexture.flip(false, true);
+		return fboTexture;
+	}
 	
 	public Vector3 getPosition () {
 		return this.position;

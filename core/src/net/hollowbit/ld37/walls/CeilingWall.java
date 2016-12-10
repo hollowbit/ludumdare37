@@ -15,8 +15,8 @@ public class CeilingWall extends Wall {
 	}
 
 	@Override
-	public void render (SpriteBatch batch) {
-		batch.setColor(0.5f, 0, 0f, 1);
+	protected void render (SpriteBatch batch) {
+		batch.setColor(1f, 1, 0f, 1);
 		batch.draw(blank, 0, 0, width, height);
 	}
 
