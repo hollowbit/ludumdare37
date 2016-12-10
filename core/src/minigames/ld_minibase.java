@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class ld_minibase extends ld_entity
 {
-	Texture bgrnd = new Texture("games/bgrnd.png");
+	public Texture bgrnd = new Texture("games/bgrnd.png");
 	public ld_minibase(int x, int y, int w, int h)
 	{
 		super(x,y,w,h);

@@ -19,7 +19,7 @@ public class game_jump extends ld_minibase {
 	public game_jump(int x, int y, int w, int h){
 		super(x,y,w,h);
 		ent_char = new ld_entity(this.x+this.w/2,this.y+12,7,7);
-		ent_floor = new ld_entity(this.x,this.y,this.w,this.h);
+		ent_floor = new ld_entity(this.x,this.y,this.w,11);
 		ent_saw1 = new ld_entity(this.x+3,this.y+12,11,6);
 		s1s = 1;
 		ent_saw2 = new ld_entity(this.x+this.w-14,this.y+12,11,6);
