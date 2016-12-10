@@ -1,34 +1,33 @@
 package net.hollowbit.ld37.walls;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import net.hollowbit.ld37.Ld37Game;
 
 public abstract class Wall {
 	
-	public static final int WIDTH = 400;
-	public static final int HEIGHT = 300;
+	public static final int FBO_SIZE = 1000;
+	public static final int SIZE = 64;
 	
-	protected Vector3 position;
-	protected Vector3 rotation;
-	protected int width;
-	protected int height;
+	protected StretchViewport viewport;
+	protected OrthographicCamera cam;
+	
 	protected FrameBuffer fbo;
 	
 	protected Texture blank;
 	
-	public Wall (Vector3 position, Vector3 rotation, int width, int height) { 
-		this.position = position;
-		this.rotation = rotation;
-		this.width = width;
-		this.height = height;
+	public Wall () { 
+		fbo = new FrameBuffer(Format.RGBA8888, FBO_SIZE, FBO_SIZE, false);
+		cam = new OrthographicCamera(SIZE, SIZE);
 		
-		this.fbo = new FrameBuffer(Format.RGBA8888, width, height, false);
+		cam.translate(SIZE / 2, SIZE / 2);
+		cam.update();
 		
 		blank = Ld37Game.getGame().getAssetManager().get("blank.png", Texture.class);
 	}
@@ -44,6 +43,7 @@ public abstract class Wall {
 	 */
 	public TextureRegion getTexture (SpriteBatch batch) {
 		fbo.begin();
+		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
 		render(batch);
 		batch.end();
@@ -52,30 +52,6 @@ public abstract class Wall {
 		TextureRegion fboTexture = new TextureRegion(fbo.getColorBufferTexture());
 		fboTexture.flip(false, true);
 		return fboTexture;
-	}
-	
-	public Vector3 getPosition () {
-		return this.position;
-	}
-	
-	public Vector3 getRotation () {
-		return this.rotation;
-	}
-	
-	public void setPosition (Vector3 position) {
-		this.position = position;
-	}
-	
-	public void setRotation (Vector3 rotation) {
-		this.rotation = rotation;
-	}
-	
-	public int getWidth () {
-		return width;
-	}
-	
-	public int getHeight () {
-		return height;
 	}
 	
 }
