@@ -67,11 +67,11 @@ public class RoomScreen extends ScreenAdapter {
 		walls = new Wall[6];
 		walls[0] = new MainMenuWall();
 		walls[1] = new GameWall();
-		walls[2] = new OptionsWall();
-		walls[3] = new CreditsWall();
+		walls[4] = new OptionsWall();
+		walls[5] = new CreditsWall();
 		
-		walls[4] = new FloorWall();//Width and height are both width because 3d!
-		walls[5] = new CeilingWall();// ^
+		walls[2] = new FloorWall();//Width and height are both width because 3d!
+		walls[3] = new CeilingWall();// ^
 		
 		CameraInputController camController = new CameraInputController(cam);
 		Gdx.input.setInputProcessor(camController);

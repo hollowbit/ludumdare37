@@ -19,8 +19,9 @@ public abstract class Wall {
 	protected OrthographicCamera cam;
 	
 	protected FrameBuffer fbo;
-	
+	protected enum W {Game,Menu,Options,Ceiling,Floor,Credits};
 	protected Texture blank;
+	protected Texture[] textures = new Texture[]{new Texture("tv_a.png"),new Texture("menu.png"),new Texture("options.png"),new Texture("purp_b.png"),new Texture("purp_b.png"),new Texture("purp_b.png")};
 	
 	public Wall () { 
 		fbo = new FrameBuffer(Format.RGBA8888, FBO_SIZE, FBO_SIZE, false);

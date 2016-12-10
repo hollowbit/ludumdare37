@@ -22,17 +22,17 @@ public class game_jump extends ld_minibase {
 		ent_floor = new ld_entity(this.x,this.y,this.w,11);
 		ent_saw1 = new ld_entity(this.x+3,this.y+12,11,6);
 		s1s = 1;
-		ent_saw2 = new ld_entity(this.x+this.w-14,this.y+12,11,6);
+		ent_saw2 = new ld_entity(this.x+52-14,this.y+12,11,6);
 		s2s = -1;
 	}
 	
 	@Override
 	public void render(SpriteBatch batch){
 		super.drawBgrnd(batch);
-		//batch.draw(character, (float)ent_char.x, (float)ent_char.y, (float)this.w,(float) this.y);
-		batch.draw(floor, (float)ent_floor.x, (float)ent_floor.y, (float)ent_floor.w, (float)ent_floor.h);
+		//batch.draw(character, (float)ent_char.x, (float)ent_char.y, (float)this.w*R,(float) this.y*R);
+		batch.draw(floor, (float)ent_floor.x, (float)ent_floor.y, (float)ent_floor.w, (float)ent_floor.h*R);
 		//batch.draw(saw, (float)ent_saw1.x, (float)ent_saw1.y, (float)this.w, (float)this.y);
-		//batch.draw(saw, (float)ent_saw2.x, (float)ent_saw2.y, (float)this.w, (float)this.y);
+		batch.draw(saw, (float)ent_saw2.x, (float)ent_saw2.y, (float)ent_saw2.w*R, (float)ent_saw2.h*R);
 	}
 	
 	@Override

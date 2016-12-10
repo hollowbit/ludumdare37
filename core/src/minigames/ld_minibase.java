@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class ld_minibase extends ld_entity
 {
+	public int WALL_H  = 1024, WALL_W = 1024;
+	public int TEX_R = 64;
+	public int R = WALL_H/TEX_R;
 	public Texture bgrnd = new Texture("games/bgrnd.png");
 	public ld_minibase(int x, int y, int w, int h)
 	{
