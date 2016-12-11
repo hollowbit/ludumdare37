@@ -62,6 +62,12 @@ public class Ld37Game extends Game {
 		  assetManager.load("menu.png", Texture.class);
 		  assetManager.load("options.png", Texture.class);
 		  assetManager.load("purp_b.png", Texture.class);
+		  
+		  //Nose Game
+		  assetManager.load("games/nose.png", Texture.class);
+		  assetManager.load("games/finger.png", Texture.class);
+		  
+		//Sounds
 	}
 	
 	

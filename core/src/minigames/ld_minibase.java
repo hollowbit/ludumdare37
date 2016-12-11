@@ -14,8 +14,8 @@ public abstract class ld_minibase extends ld_entity {
 	public static final int HEIGHT = 54;
 	
 	public Texture bgrnd = new Texture("games/bgrnd.png");
-	public ld_timer tut = new ld_timer(3);
-	public ld_timer end = new ld_timer(3);
+	public ld_timer tut = new ld_timer(2);
+	public ld_timer end = new ld_timer(2);
 	public boolean reachedEnd = false;
 	public State minist = State.TUT;
 	private GameEndHandler[] gameEndHandlers;
