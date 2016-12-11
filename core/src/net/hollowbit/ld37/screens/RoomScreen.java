@@ -1,6 +1,7 @@
 package net.hollowbit.ld37.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -39,11 +40,11 @@ public class RoomScreen extends ScreenAdapter {
 	private PerspectiveCamera cam;
 	private OrthographicCamera cam2d;
 	private ModelBatch mBatch;
-	
+	private State gameState = State.MAIN; 
 	private int currentWall = 0;//Starts in main menu wall
 	
 	private float x = 0, y = 0, z = 0f;
-	
+	private float rot = 0f;
 	private ModelBuilder modelBuilder;
 	
 	public RoomScreen (SpriteBatch batch) {
@@ -52,7 +53,7 @@ public class RoomScreen extends ScreenAdapter {
 		//Load components required for wall management
 		mBatch = new ModelBatch();
 		
-		cam = new PerspectiveCamera(100, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		cam = new PerspectiveCamera(90, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		cam.near = 0.1f;
 		cam.far = 0;
 		cam.position.set(x, y, z);
@@ -76,8 +77,8 @@ public class RoomScreen extends ScreenAdapter {
 		walls[2] = new FloorWall(new Vector3(0,-1,0));//Width and height are both width because 3d!
 		walls[3] = new CeilingWall(new Vector3(0,-1,0));// ^
 		
-		CameraInputController camController = new CameraInputController(cam);
-		Gdx.input.setInputProcessor(camController);
+		//CameraInputController camController = new CameraInputController(cam);
+		//Gdx.input.setInputProcessor(camController);
 	}
 	
 	@Override
@@ -85,10 +86,11 @@ public class RoomScreen extends ScreenAdapter {
 		
 		super.show();
 	}
-	
+	public boolean rotating = false;
 	@Override
 	public void render (float delta) {
 		super.render(delta);
+		if (!rotating) getInput();
 		
 		for (Wall wall : walls) {
 			if (wall == null)
@@ -119,17 +121,92 @@ public class RoomScreen extends ScreenAdapter {
 		mBatch.begin(cam);
 		mBatch.render(boxInstance);
 		mBatch.end();
-		System.out.println(-getCameraCurrentXYAngle(cam) + 180);
+		
 		//Draw 2d overlay
 		batch.setProjectionMatrix(cam2d.combined);
 		batch.begin();
 		Ld37Game.getGame().getFont().draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
 		Ld37Game.getGame().getFont().draw(batch, "X: " + x + "  Y: " + y + "  Z: " + z, 10, 40);
 		batch.end();
+		switch (gameState){
+		case MAIN:
+			rotateToMenu();
+			break;
+		case OPTNS:
+			rotateToOptions();
+			break;
+		case GAME:
+			rotateToGame();
+			break;
+		case CREDITS:
+			rotateToCredits();
+			break;
+		}
+		 
+			 
 	}
-	public float getCameraCurrentXYAngle(PerspectiveCamera cam2)
-	{
-	    return (float)Math.atan2(cam2.up.x, cam2.up.z)*MathUtils.radiansToDegrees;
+	private void getInput() {
+		 if(gameState!=State.MAIN && Gdx.input.isKeyPressed(Input.Keys.Z)){
+			 rotating=true;
+			 gameState=State.MAIN;
+		 }
+		 if(gameState!=State.OPTNS && Gdx.input.isKeyPressed(Input.Keys.X)){
+			 rotating=true;
+			 gameState=State.OPTNS;
+		 }
+		 if(gameState!=State.GAME && Gdx.input.isKeyPressed(Input.Keys.C)){
+			 rotating=true;
+			 gameState=State.GAME;
+		 }
+		 if(gameState!=State.CREDITS && Gdx.input.isKeyPressed(Input.Keys.V)){
+			 rotating=true;
+			 gameState=State.CREDITS;
+		 }
+		
+	}
+
+	private void rotateToCredits() {
+		if(rot < 270f){
+			rotateCam(0.05f);
+		} else if (rot > 271f){
+			rotateCam(-0.05f);
+		} else rotating = false;
+		
+	}
+
+	private void rotateToMenu() {
+		if(rot < 0f){
+			rotateCam(0.05f);
+		} else if (rot > 1f){
+			rotateCam(-0.05f);
+		} else rotating = false;
+		
+		
+	}
+
+	private void rotateToGame() {
+		if(rot < 180f){
+			rotateCam(0.05f);
+		} else if (rot > 181f){
+			rotateCam(-0.05f);
+		} else rotating = false;
+		
+		
+	}
+	public void rotateToOptions(){
+		if(rot < 90f){
+			rotateCam(0.05f);
+		} else if (rot > 91f){
+			rotateCam(-0.05f);
+		} else rotating = false;
+		 
+	}
+	public void rotateCam(float a){
+		cam.rotate(cam.up,a);
+		cam.update();
+		cam.normalizeUp();
+		rot+=a;
+		System.out.println(rot);
 	}
 	
 	@Override
