@@ -3,6 +3,7 @@ package minigames;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import net.hollowbit.ld37.Ld37Game;
@@ -11,14 +12,18 @@ public abstract class ld_minibase extends ld_entity
 {
 	
 	public Texture bgrnd = new Texture("games/bgrnd.png");
-	public ld_minibase(int x, int y, int w, int h)
+	public ld_timer tut = new ld_timer(300);
+	public ld_timer end = new ld_timer(300);
+	public boolean reachedEnd = false;
+	public ld_minibase(float x, float y, float w, float h)
 	{
 		super(x,y,w,h);
+		this.textLayout = new GlyphLayout(Ld37Game.getGame().getFont(), "Game Over");
 	}
 	
 	boolean update = false;
 	public State minist = State.TUT;
-	
+	GlyphLayout textLayout;
 	public void render(SpriteBatch batch){		//To be overriden
 		drawBgrnd(batch);
 		switch(minist){
@@ -54,7 +59,8 @@ public abstract class ld_minibase extends ld_entity
 	
 	
 	public void upTut(float delta) {
-		// override this
+		tut.count(delta);
+		if (tut.done) minist=State.PLAY;
 		
 	}
 	public void upPlay(float delta) {
@@ -62,7 +68,8 @@ public abstract class ld_minibase extends ld_entity
 		
 	}
 	public void upEnd(float delta) {
-		// override this
+		end.count(delta);
+		if (tut.done) reachedEnd=true;
 		
 	}
 	public void renTut(SpriteBatch batch) {
@@ -74,7 +81,7 @@ public abstract class ld_minibase extends ld_entity
 		
 	}
 	public void renEnd(SpriteBatch batch) {
-		// override this
+		Ld37Game.getGame().getFont().draw(batch, textLayout,(float) (getDrawX() + (w / 2 - textLayout.width / 2)),(float)( y + (h / 2 + textLayout.height / 2)));
 		
 	}
 	public void start(){
@@ -107,5 +114,8 @@ public abstract class ld_minibase extends ld_entity
 	}
 	public void stop(boolean success){
 		this.update = false;
+	}
+	private float getDrawX () {
+		return (float)this.x - (float)this.w / 2;
 	}
 }
