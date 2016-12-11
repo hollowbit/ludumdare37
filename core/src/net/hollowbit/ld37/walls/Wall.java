@@ -46,7 +46,7 @@ public abstract class Wall {
 		blank = Ld37Game.getGame().getAssetManager().get("blank.png", Texture.class);
 	}
 	
-	public abstract void update (float delta);
+	public abstract void update (float delta, boolean currentWall);
 	
 	/**
 	 * Only called if this is the current screen

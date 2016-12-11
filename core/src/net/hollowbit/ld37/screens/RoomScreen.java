@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 
+import minigames.ld_minibase;
 import net.hollowbit.ld37.Ld37Game;
 import net.hollowbit.ld37.walls.CeilingWall;
 import net.hollowbit.ld37.walls.CreditsWall;
@@ -28,11 +29,13 @@ import net.hollowbit.ld37.walls.MainMenuWall;
 import net.hollowbit.ld37.walls.OptionsWall;
 import net.hollowbit.ld37.walls.Wall;
 
-public class RoomScreen extends ScreenAdapter {
+public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHandler {
 
 	public static final float MOVE_SPEED = 0.6f;
 	private static final int MAX_CURRENT_WALL = 4 - 1;//Player can only view first 4 walls
 	private static final int CAM_ROTATE_SPEED = 120;
+	private static final float WATER_HEIGHT_CHANGE = 0.1f;
+	private static final float WATER_MOVE_SPEED = 0.05f;
 	
 	private Wall[] walls;
 	
@@ -48,6 +51,7 @@ public class RoomScreen extends ScreenAdapter {
 	private float rot = 0f;
 	private ModelBuilder modelBuilder;
     private float waterHeight = 0;
+    private float waterHeightGoal = 0;
     
 	private boolean rotating = false;
     
@@ -98,7 +102,7 @@ public class RoomScreen extends ScreenAdapter {
 		for (int i = 0; i < walls.length; i++) {
 			if (i == currentWall && !rotating)
 				walls[i].handleInput();
-			walls[i].update(delta);
+			walls[i].update(delta, i == currentWall);
 		}
 		
 		int attr = VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates;
@@ -119,10 +123,21 @@ public class RoomScreen extends ScreenAdapter {
 		Model box = modelBuilder.end();
 		ModelInstance boxInstance = new ModelInstance(box);
 		
-		waterHeight += delta * 0.02;
+		if (waterHeight < waterHeightGoal) {
+			waterHeight += WATER_MOVE_SPEED * delta;
+			if (waterHeight > waterHeightGoal)
+				waterHeight = waterHeightGoal;
+		}
+		
+		if (waterHeight > waterHeightGoal) {
+			waterHeight -= WATER_MOVE_SPEED * delta;
+			if (waterHeight < waterHeightGoal)
+				waterHeight = waterHeightGoal;
+		}
+		
 		Model water = modelBuilder.createBox(4f, 4f * waterHeight, 4f, new Material(IntAttribute.createCullFace(0), ColorAttribute.createDiffuse(0.2f, 0.4f, 1.7f, 0.5f),  TextureAttribute.createDiffuse(Ld37Game.getGame().getAssetManager().get("water.png", Texture.class)), new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)), attr);
 		ModelInstance waterInstance = new ModelInstance(water);
-		waterInstance.transform.setToTranslation(0, (4f * waterHeight / 2) - 2, 0);
+		waterInstance.transform.setToTranslation(0, (2.01f * waterHeight / 2) - 2, 0);
 		
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -233,6 +248,17 @@ public class RoomScreen extends ScreenAdapter {
 	public void setState (State state) {
 		this.gameState = state;
 		this.currentWall = state.getWallNo();
+	}
+
+	@Override
+	public void handleGameEnd (boolean won) {
+		if (won)
+			waterHeightGoal -= WATER_HEIGHT_CHANGE;
+		else
+			waterHeightGoal += WATER_HEIGHT_CHANGE;
+		
+		if (waterHeightGoal < 0)
+			waterHeightGoal = 0;
 	}
 	
 }

@@ -1,30 +1,45 @@
 package minigames;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import net.hollowbit.ld37.Ld37Game;
 
-public abstract class ld_minibase extends ld_entity
-{
+public abstract class ld_minibase extends ld_entity {
+	
+	public static final int X_OFFSET = 6;
+	public static final int Y_OFFSET = 7;
+	public static final int WIDTH = 54;
+	public static final int HEIGHT = 54;
 	
 	public Texture bgrnd = new Texture("games/bgrnd.png");
-	public ld_timer tut = new ld_timer(300);
-	public ld_timer end = new ld_timer(300);
+	public ld_timer tut = new ld_timer(3);
+	public ld_timer end = new ld_timer(3);
 	public boolean reachedEnd = false;
-	public ld_minibase(float x, float y, float w, float h)
-	{
-		super(x,y,w,h);
+	public State minist = State.TUT;
+	private GameEndHandler[] gameEndHandlers;
+	
+	GlyphLayout textLayout;
+	GlyphLayout gameWinTextLayout;
+	GlyphLayout gameLoseTextLayout;
+	boolean won = false;
+	
+	public ld_minibase (GameEndHandler... gameEndHandlers) {
+		super(X_OFFSET, Y_OFFSET, WIDTH, HEIGHT);
+		this.gameEndHandlers = gameEndHandlers;
 		this.textLayout = new GlyphLayout(Ld37Game.getGame().getFont(), "Game Over");
+		this.gameWinTextLayout = new GlyphLayout(Ld37Game.getGame().getFont(), "You Win :)");
+		this.gameLoseTextLayout = new GlyphLayout(Ld37Game.getGame().getFont(), "You Lose :(");
 	}
 	
-	boolean update = false;
-	public State minist = State.TUT;
-	GlyphLayout textLayout;
-	public void render(SpriteBatch batch){		//To be overriden
+	public abstract void start ();
+	
+	/**
+	 * Do not override this! Override renTut, renPlay and renEnd instead.
+	 * @param batch
+	 */
+	public void render (SpriteBatch batch) {
 		drawBgrnd(batch);
 		switch(minist){
 		case TUT:
@@ -39,10 +54,16 @@ public abstract class ld_minibase extends ld_entity
 		}
 		return;
 	}
-	public void drawBgrnd(SpriteBatch batch){			
+	
+	protected void drawBgrnd(SpriteBatch batch){			
 		batch.draw(this.bgrnd,(int)this.x,(int)this.y);
 	}
-	public void update(float delta){					//Do not override this, overwrite tutorialUpdate, playUpdate and endUpdate.
+	
+	/**
+	 * Do not override this, override upTut, upPlay and upEnd instead.
+	 * @param delta
+	 */
+	public void update (float delta) {
 		switch(minist){
 		case TUT:
 			upTut(delta);
@@ -58,64 +79,42 @@ public abstract class ld_minibase extends ld_entity
 	}
 	
 	
-	public void upTut(float delta) {
+	protected void upTut(float delta) {
 		tut.count(delta);
-		if (tut.done) minist=State.PLAY;
-		
+		if (tut.done) minist = State.PLAY;
 	}
-	public void upPlay(float delta) {
-		// override this
-		
-	}
-	public void upEnd(float delta) {
+	
+	protected abstract void upPlay(float delta);
+	
+	protected void upEnd(float delta) {
 		end.count(delta);
-		if (tut.done) reachedEnd=true;
-		
+		if (end.done) {
+			for (GameEndHandler handler : gameEndHandlers) {
+				if (handler != null)
+					handler.handleGameEnd(won);
+			}
+		}
 	}
-	public void renTut(SpriteBatch batch) {
-		// override this
-		
+
+	protected abstract void renPlay(SpriteBatch batch);
+	protected abstract void renTut(SpriteBatch batch);
+	
+	protected void endGame (boolean won) {
+		minist = State.END;
+		this.won = won;
 	}
-	public void renPlay(SpriteBatch batch) {
-		// override this
-		
+	
+	protected void renEnd(SpriteBatch batch) {
+		Ld37Game.getGame().getFont().draw(batch, textLayout,(float) (w / 2 - textLayout.width / 2) + X_OFFSET,(float)( y + (h / 2 + textLayout.height / 2) + 10));
+		if (won)
+			Ld37Game.getGame().getFont().draw(batch, gameWinTextLayout,(float) (w / 2 - gameWinTextLayout.width / 2) + X_OFFSET,(float)( y + (h / 2 + gameWinTextLayout.height / 2) - 10));
+		else
+			Ld37Game.getGame().getFont().draw(batch, gameLoseTextLayout,(float) (w / 2 - gameLoseTextLayout.width / 2) + X_OFFSET,(float)( y + (h / 2 + gameLoseTextLayout.height / 2) - 10));
 	}
-	public void renEnd(SpriteBatch batch) {
-		Ld37Game.getGame().getFont().draw(batch, textLayout,(float) (getDrawX() + (w / 2 - textLayout.width / 2)),(float)( y + (h / 2 + textLayout.height / 2)));
-		
-	}
-	public void start(){
-		this.update = true;
-	}
-	public void readKeys(){		//Do not override this
-		 if(Gdx.input.isKeyPressed(Input.Keys.Z))
-			 Zpressed();
-		 else
-			 ZnotPressed();
-	     if(Gdx.input.isKeyPressed(Input.Keys.X))
-	    	 Xpressed();
-		 else
-			 XnotPressed();      
-	}
-	public void Zpressed(){			//override these
-		return;
-	}
-	public void ZnotPressed(){
-		return;
-	}
-	public void Xpressed(){
-		return;
-	}
-	public void XnotPressed(){
-		return;
-	}
-	public void stop(float timer){
-		this.update = false;
-	}
-	public void stop(boolean success){
-		this.update = false;
-	}
-	private float getDrawX () {
-		return (float)this.x - (float)this.w / 2;
+	
+	public abstract void handleInput (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed);
+	
+	public interface GameEndHandler {
+		public abstract void handleGameEnd (boolean won);
 	}
 }

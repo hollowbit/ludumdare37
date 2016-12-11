@@ -9,7 +9,7 @@ public class ld_timer {
 	}
 	public void count(float delta) {
 		if (timer < maxTime){
-			timer+=delta*100;
+			timer+=delta;
 			
 		} else {
 			done = true;

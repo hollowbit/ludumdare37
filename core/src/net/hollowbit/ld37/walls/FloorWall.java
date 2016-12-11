@@ -14,7 +14,7 @@ public class FloorWall extends Wall {
 	}
 
 	@Override
-	public void update (float delta) {
+	public void update (float delta, boolean currentWall) {
 	}
 
 	@Override
