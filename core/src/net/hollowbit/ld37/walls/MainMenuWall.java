@@ -26,7 +26,7 @@ public class MainMenuWall extends Wall {
 
 	@Override
 	protected void render (SpriteBatch batch) {
-		batch.setColor(1f, 1f, 0f, 1);
+		batch.setColor(0.3f, 0.3f, 0.3f, 1);
 		batch.draw(textures[1],0,0);
 		batch.setColor(1f, 1f, 1f, 1);
 		play.draw(batch);

@@ -16,7 +16,7 @@ public class OptionsWall extends Wall {
 
 	@Override
 	protected void render (SpriteBatch batch) {
-		batch.setColor(1f, 1f, 0f, 0.1f);
+		batch.setColor(0.3f, 0.3f, 0.3f, 1);
 		batch.draw(textures[2],0,0);
 	}
 

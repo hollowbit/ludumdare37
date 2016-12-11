@@ -16,22 +16,8 @@ public class FloorWall extends Wall {
 
 	@Override
 	protected void render (SpriteBatch batch) {
-		batch.setColor(1f, 1, 0f, 1);
-		batch.draw(textures[5],
-                0,
-                0,
-                32,
-                32,
-                64,
-                64,
-                1,
-                1,
-                90,
-                0,
-                0,
-                64,
-                64,
-                true, false);
+		batch.setColor(0.3f, 0.3f, 0.3f, 1);
+		batch.draw(textures[5],0,0);
 	}
 
 	@Override
