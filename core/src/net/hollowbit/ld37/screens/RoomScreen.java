@@ -2,6 +2,7 @@ package net.hollowbit.ld37.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,9 +15,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 import net.hollowbit.ld37.Ld37Game;
@@ -27,6 +26,7 @@ import net.hollowbit.ld37.walls.GameWall;
 import net.hollowbit.ld37.walls.MainMenuWall;
 import net.hollowbit.ld37.walls.OptionsWall;
 import net.hollowbit.ld37.walls.Wall;
+import ui.ld_button;
 
 public class RoomScreen extends ScreenAdapter {
 
@@ -46,8 +46,15 @@ public class RoomScreen extends ScreenAdapter {
 	private float x = 0, y = 0, z = 0f;
 	private float rot = 0f;
 	private ModelBuilder modelBuilder;
-	
+	private boolean enabledCredits = false;
+	private ld_button play = new ld_button(256,128,128,64);
+	private ld_button options = new ld_button(0,0,0,0);
+	private ld_button quit = new ld_button(0,0,0,0);
+
+       
 	public RoomScreen (SpriteBatch batch) {
+		 
+	    
 		this.batch = batch;
 		
 		//Load components required for wall management
@@ -80,7 +87,7 @@ public class RoomScreen extends ScreenAdapter {
 		//CameraInputController camController = new CameraInputController(cam);
 		//Gdx.input.setInputProcessor(camController);
 	}
-	
+
 	@Override
 	public void show () {
 		
@@ -90,6 +97,7 @@ public class RoomScreen extends ScreenAdapter {
 	@Override
 	public void render (float delta) {
 		super.render(delta);
+		
 		if (!rotating) getInput();
 		
 		for (Wall wall : walls) {
@@ -125,6 +133,12 @@ public class RoomScreen extends ScreenAdapter {
 		//Draw 2d overlay
 		batch.setProjectionMatrix(cam2d.combined);
 		batch.begin();
+		if(gameState == State.MAIN  && Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+			if (play.checkMouse(batch)) gameState=State.GAME;
+			else if (options.checkMouse(batch)) gameState=State.OPTNS;
+			else if (quit.checkMouse(batch)) Gdx.app.exit();
+			
+		}
 		Ld37Game.getGame().getFont().draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
 		Ld37Game.getGame().getFont().draw(batch, "X: " + x + "  Y: " + y + "  Z: " + z, 10, 40);
 		batch.end();
@@ -158,7 +172,7 @@ public class RoomScreen extends ScreenAdapter {
 			 rotating=true;
 			 gameState=State.GAME;
 		 }
-		 if(gameState!=State.CREDITS && Gdx.input.isKeyPressed(Input.Keys.V)){
+		 if((enabledCredits) && gameState!=State.CREDITS && Gdx.input.isKeyPressed(Input.Keys.V)){
 			 rotating=true;
 			 gameState=State.CREDITS;
 		 }
