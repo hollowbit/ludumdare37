@@ -47,8 +47,17 @@ public class ld_manager implements ld_minibase.GameEndHandler {
 	
 	public ld_minibase chooseOne(int choice){
 		switch (choice){
+<<<<<<< HEAD
 		default:
 			return (new MatchGame(this, roomScreen));
+=======
+		case 0:
+			return (new MathGame(this, roomScreen));
+		case 1:
+			return (new NoseGame(this, roomScreen));
+		default:
+			return null;
+>>>>>>> origin/master
 		}
 	}
 

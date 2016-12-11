@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 
-import minigames.State;
 import minigames.ld_minibase;
 import minigames.ld_timer;
 import net.hollowbit.ld37.Ld37Game;
@@ -30,7 +29,7 @@ public class NoseGame extends ld_minibase {
 	
 	public NoseGame (GameEndHandler... gameEndHandlers) {
 		super(gameEndHandlers);
-		timer = new ld_timer(10);
+		timer = new ld_timer(5);
 		
 		//Get textures from asset manager
 		nose = Ld37Game.getGame().getAssetManager().get("games/nose.png", Texture.class);
@@ -79,6 +78,9 @@ public class NoseGame extends ld_minibase {
 	protected void renPlay (SpriteBatch batch) {
 		batch.draw(nose, X_OFFSET + WIDTH / 2 - nose.getWidth() / 2, Y_OFFSET + HEIGHT / 2 - nose.getHeight() / 2 + 8);
 		batch.draw(finger, fingerX, fingerY);
+		
+		GlyphLayout timerLayout = new GlyphLayout(Ld37Game.getGame().getFont(), String.format("%.1f", timer.maxTime - timer.timer) + "s");
+		Ld37Game.getGame().getFont().draw(batch, timerLayout, X_OFFSET + WIDTH / 2 - timerLayout.width / 2, Y_OFFSET);
 	}
 
 	@Override
@@ -87,8 +89,8 @@ public class NoseGame extends ld_minibase {
 	}
 
 	@Override
-	public void handleInput (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
-		if (isZJustPressed && minist == State.PLAY)
+	public void handleInputPrivate (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
+		if (isZJustPressed)
 			stopFinger = true;
 	}
 
