@@ -12,6 +12,10 @@ import net.hollowbit.ld37.screens.RoomScreen;
 
 public class Ld37Game extends Game {
 	
+	private boolean quitButt;
+	public Ld37Game(boolean quitButt){
+		this.quitButt = quitButt;
+	}
 	SpriteBatch batch;
 	AssetManager assetManager;
 	BitmapFont font;
@@ -28,7 +32,7 @@ public class Ld37Game extends Game {
 		font = new BitmapFont();
 		font.setColor(new Color(1f,1f,0f,1f));
 		font.getData().setScale(0.5f);
-		this.setScreen(new RoomScreen(batch));
+		this.setScreen(new RoomScreen(batch,quitButt));
 	}
 
 	@Override

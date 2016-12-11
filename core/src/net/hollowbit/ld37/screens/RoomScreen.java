@@ -2,7 +2,6 @@ package net.hollowbit.ld37.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import net.hollowbit.ld37.Ld37Game;
@@ -47,14 +47,14 @@ public class RoomScreen extends ScreenAdapter {
 	private float rot = 0f;
 	private ModelBuilder modelBuilder;
 	private boolean enabledCredits = false;
-	private ld_button play = new ld_button(256,128,128,64);
-	private ld_button options = new ld_button(0,0,0,0);
-	private ld_button quit = new ld_button(0,0,0,0);
-
+	private ld_button play = new ld_button(250,687,500,250);
+	private ld_button options = new ld_button(250,406,500,250);
+	private ld_button quit;
+	private boolean quitButt;
        
-	public RoomScreen (SpriteBatch batch) {
-		 
-	    
+	public RoomScreen (SpriteBatch batch, boolean quitButt) {
+		this.quitButt = quitButt;
+	    if (quitButt) quit  = new ld_button(250,125,500,250);
 		this.batch = batch;
 		
 		//Load components required for wall management
@@ -76,7 +76,7 @@ public class RoomScreen extends ScreenAdapter {
 		
 		//Initialize walls
 		walls = new Wall[6];
-		walls[0] = new MainMenuWall(new Vector3(-1,0,0));
+		walls[0] = new MainMenuWall(new Vector3(-1,0,0), quitButt);
 		walls[1] = new GameWall(new Vector3(1,0,0));
 		walls[4] = new OptionsWall(new Vector3(-1,0,0));
 		walls[5] = new CreditsWall(new Vector3(1,0,0));
@@ -130,15 +130,12 @@ public class RoomScreen extends ScreenAdapter {
 		mBatch.render(boxInstance);
 		mBatch.end();
 		
+		
+		
 		//Draw 2d overlay
 		batch.setProjectionMatrix(cam2d.combined);
 		batch.begin();
-		if(gameState == State.MAIN  && Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-			if (play.checkMouse(batch)) gameState=State.GAME;
-			else if (options.checkMouse(batch)) gameState=State.OPTNS;
-			else if (quit.checkMouse(batch)) Gdx.app.exit();
-			
-		}
+		
 		Ld37Game.getGame().getFont().draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
 		Ld37Game.getGame().getFont().draw(batch, "X: " + x + "  Y: " + y + "  Z: " + z, 10, 40);
 		batch.end();
@@ -160,7 +157,17 @@ public class RoomScreen extends ScreenAdapter {
 			 
 	}
 	private void getInput() {
-		 if(gameState!=State.MAIN && Gdx.input.isKeyPressed(Input.Keys.Z)){
+		float mx =Gdx.input.getX();
+		float my =Gdx.graphics.getHeight()-Gdx.input.getY();
+		Vector2 mouseVec = new Vector2(mx,my);
+		if(gameState == State.MAIN  && Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+			if (play.checkMouse(mouseVec)) gameState=State.GAME;
+			if (options.checkMouse(mouseVec)) gameState=State.OPTNS;
+			if (quitButt && quit.checkMouse(mouseVec)) Gdx.app.exit();
+			
+		}
+		//Old system
+		/* if(gameState!=State.MAIN && Gdx.input.isKeyPressed(Input.Keys.Z)){
 			 rotating=true;
 			 gameState=State.MAIN;
 		 }
@@ -175,7 +182,7 @@ public class RoomScreen extends ScreenAdapter {
 		 if((enabledCredits) && gameState!=State.CREDITS && Gdx.input.isKeyPressed(Input.Keys.V)){
 			 rotating=true;
 			 gameState=State.CREDITS;
-		 }
+		 }*/
 		
 	}
 
