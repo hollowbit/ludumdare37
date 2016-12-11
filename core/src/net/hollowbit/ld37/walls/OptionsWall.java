@@ -13,6 +13,8 @@ import ui.ld_button;
 public class OptionsWall extends Wall {
 	
 	ld_button menuButton;
+	ld_button sfxMuteButton;
+	ld_button musicMuteButton;
 	
 	public OptionsWall(Vector3 dir, RoomScreen roomScreen) {
 		super(dir, roomScreen);
@@ -28,6 +30,12 @@ public class OptionsWall extends Wall {
 	protected void render (SpriteBatch batch) {
 		batch.draw(Ld37Game.getGame().getAssetManager().get("options.png", Texture.class), 0, 0);
 		menuButton.render(batch);
+	
+		sfxMuteButton = new ld_button("SFX " + (Ld37Game.SFX_ON ? "ON" : "OFF"), SIZE / 2, SIZE / 2 + 5, 3);
+		sfxMuteButton.render(batch);
+		
+		musicMuteButton = new ld_button("MUSIC " + (Ld37Game.MUSIC_ON ? "ON" : "OFF"), SIZE / 2, SIZE / 2 - 10, 3);
+		musicMuteButton.render(batch);
 	}
 
 	@Override
@@ -39,9 +47,12 @@ public class OptionsWall extends Wall {
 	public void handleInput() {
 		if (Gdx.input.justTouched()) {
 			Vector3 mousePos = getMouseInput();
-			System.out.println(mousePos);
 			if (menuButton.checkMouse(mousePos))
 				roomScreen.setState(State.MAIN);
+			if (sfxMuteButton.checkMouse(mousePos))
+				Ld37Game.SFX_ON = !Ld37Game.SFX_ON;
+			if (musicMuteButton.checkMouse(mousePos))
+				Ld37Game.MUSIC_ON = !Ld37Game.MUSIC_ON;
 		}
 	}
 

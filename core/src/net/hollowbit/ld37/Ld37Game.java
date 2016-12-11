@@ -2,6 +2,7 @@ package net.hollowbit.ld37;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,6 +11,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import net.hollowbit.ld37.screens.RoomScreen;
 
 public class Ld37Game extends Game {
+	
+	public static boolean SFX_ON = true;
+	public static boolean MUSIC_ON = true;
 	
 	SpriteBatch batch;
 	AssetManager assetManager;
@@ -23,6 +27,8 @@ public class Ld37Game extends Game {
 		assetManager = new AssetManager();
 		this.loadAssets();
 		assetManager.finishLoading();
+		assetManager.get("alpha_wave_m0nster.wav", Music.class).play();
+		assetManager.get("alpha_wave_m0nster.wav", Music.class).setLooping(true);
 
 		font = new BitmapFont();
 		font.setColor(new Color(1f,1f,0f,1f));
@@ -33,6 +39,11 @@ public class Ld37Game extends Game {
 	@Override
 	public void render () {
 		super.render();
+		
+		if (!MUSIC_ON)
+			assetManager.get("alpha_wave_m0nster.wav", Music.class).pause();
+		else
+			assetManager.get("alpha_wave_m0nster.wav", Music.class).play();
 	}
 	
 	@Override
@@ -68,6 +79,13 @@ public class Ld37Game extends Game {
 		  assetManager.load("games/finger.png", Texture.class);
 		  
 		//Sounds
+		assetManager.load("alpha_wave_m0nster.wav", Music.class);
+		//assetManager.load("soundfx.wav", Sound.class);//How to load a sound effect
+	}
+	
+	public void playSfx (String location) {
+		if (SFX_ON)
+			assetManager.get("alpha_wave_m0nster.wav", Music.class).play();
 	}
 	
 	
