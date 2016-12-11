@@ -36,7 +36,7 @@ public class NoseGame extends ld_minibase {
 		nose = Ld37Game.getGame().getAssetManager().get("games/nose.png", Texture.class);
 		finger = Ld37Game.getGame().getAssetManager().get("games/finger.png", Texture.class);
 		
-		tutLayout = new GlyphLayout(Ld37Game.getGame().getFont(), "Press Z to pick nose!", Color.WHITE, WIDTH, Align.left, true);
+		tutLayout = new GlyphLayout(Ld37Game.getGame().getFont(), "Press Z to pick nose!", Color.ORANGE, WIDTH, Align.left, true);
 	}
 	
 	@Override
