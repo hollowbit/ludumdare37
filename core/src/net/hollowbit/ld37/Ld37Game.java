@@ -11,6 +11,9 @@ import net.hollowbit.ld37.screens.RoomScreen;
 
 public class Ld37Game extends Game {
 	
+	public static boolean SFX_ON = true;
+	public static boolean MUSIC_ON = true;
+	
 	SpriteBatch batch;
 	AssetManager assetManager;
 	BitmapFont font;
