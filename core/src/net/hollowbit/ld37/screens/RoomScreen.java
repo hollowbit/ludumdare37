@@ -17,10 +17,10 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-<<<<<<< HEAD
+
 import com.badlogic.gdx.math.Vector2;
-=======
->>>>>>> origin/master
+
+
 import com.badlogic.gdx.math.Vector3;
 
 import net.hollowbit.ld37.Ld37Game;
@@ -51,21 +51,17 @@ public class RoomScreen extends ScreenAdapter {
 	private float x = 0, y = 0, z = 0f;
 	private float rot = 0f;
 	private ModelBuilder modelBuilder;
-<<<<<<< HEAD
+
 	private boolean enabledCredits = false;
 	private ld_button play = new ld_button(250,687,500,250);
 	private ld_button options = new ld_button(250,406,500,250);
 	private ld_button quit;
 	private boolean quitButt;
-       
+    private float waterHeight = 0;
 	public RoomScreen (SpriteBatch batch, boolean quitButt) {
 		this.quitButt = quitButt;
-	    if (quitButt) quit  = new ld_button(250,125,500,250);
-=======
-	private float waterHeight = 0;
-	
-	public RoomScreen (SpriteBatch batch) {
->>>>>>> origin/master
+	    if (this.quitButt) quit = new ld_button(250,125,500,250);
+	   
 		this.batch = batch;
 		
 		//Load components required for wall management
