@@ -130,16 +130,16 @@ public class RoomScreen extends ScreenAdapter {
 		batch.end();
 		switch (gameState){
 		case MAIN:
-			rotateToMenu();
+			rotateToMenu(delta);
 			break;
 		case OPTNS:
-			rotateToOptions();
+			rotateToOptions(delta);
 			break;
 		case GAME:
-			rotateToGame();
+			rotateToGame(delta);
 			break;
 		case CREDITS:
-			rotateToCredits();
+			rotateToCredits(delta);
 			break;
 		}
 		 
@@ -165,39 +165,39 @@ public class RoomScreen extends ScreenAdapter {
 		
 	}
 
-	private void rotateToCredits() {
+	private void rotateToCredits(float delta) {
 		if(rot < 270f){
-			rotateCam(0.05f);
+			rotateCam(250f*delta);
 		} else if (rot > 271f){
-			rotateCam(-0.05f);
+			rotateCam(-250f*delta);
 		} else rotating = false;
 		
 	}
 
-	private void rotateToMenu() {
+	private void rotateToMenu(float delta) {
 		if(rot < 0f){
-			rotateCam(0.05f);
+			rotateCam(250f*delta);
 		} else if (rot > 1f){
-			rotateCam(-0.05f);
+			rotateCam(-250f*delta);
 		} else rotating = false;
 		
 		
 	}
 
-	private void rotateToGame() {
+	private void rotateToGame(float delta) {
 		if(rot < 180f){
-			rotateCam(0.05f);
+			rotateCam(250f*delta);
 		} else if (rot > 181f){
-			rotateCam(-0.05f);
+			rotateCam(-250f*delta);
 		} else rotating = false;
 		
 		
 	}
-	public void rotateToOptions(){
+	public void rotateToOptions(float delta){
 		if(rot < 90f){
-			rotateCam(0.05f);
+			rotateCam(250f*delta);
 		} else if (rot > 91f){
-			rotateCam(-0.05f);
+			rotateCam(-250f*delta);
 		} else rotating = false;
 		 
 	}

@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
 import net.hollowbit.ld37.Ld37Game;
-import ui.ld_button;
+import ui.ld_nine;
 
 public class MainMenuWall extends Wall {
-	public ld_button play = new ld_button(new Texture("ui_box.png"), 16, 8,32,16, 4);
-	public ld_button options = new ld_button(new Texture("ui_box.png"), 16, 26,32,16, 4);
-	public ld_button quit = new ld_button(new Texture("ui_box.png"), 16, 44,32,16, 4);
+	public ld_nine play = new ld_nine(new Texture("ui_box.png"), 16, 8,32,16, 4);
+	public ld_nine options = new ld_nine(new Texture("ui_box.png"), 16, 26,32,16, 4);
+	public ld_nine quit = new ld_nine(new Texture("ui_box.png"), 16, 44,32,16, 4);
 	public MainMenuWall(Vector3 dir) {
 		super(dir);
 		// TODO Auto-generated constructor stub
