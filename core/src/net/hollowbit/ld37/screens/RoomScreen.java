@@ -1,7 +1,6 @@
 package net.hollowbit.ld37.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,10 +17,6 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-
-import com.badlogic.gdx.math.Vector2;
-
-
 import com.badlogic.gdx.math.Vector3;
 
 import net.hollowbit.ld37.Ld37Game;
@@ -32,12 +27,12 @@ import net.hollowbit.ld37.walls.GameWall;
 import net.hollowbit.ld37.walls.MainMenuWall;
 import net.hollowbit.ld37.walls.OptionsWall;
 import net.hollowbit.ld37.walls.Wall;
-import ui.ld_button;
 
 public class RoomScreen extends ScreenAdapter {
 
 	public static final float MOVE_SPEED = 0.6f;
 	private static final int MAX_CURRENT_WALL = 4 - 1;//Player can only view first 4 walls
+	private static final int CAM_ROTATE_SPEED = 120;
 	
 	private Wall[] walls;
 	
@@ -52,17 +47,11 @@ public class RoomScreen extends ScreenAdapter {
 	private float x = 0, y = 0, z = 0f;
 	private float rot = 0f;
 	private ModelBuilder modelBuilder;
-
-	private boolean enabledCredits = false;
-	private ld_button play = new ld_button(250,687,500,250);
-	private ld_button options = new ld_button(250,406,500,250);
-	private ld_button quit;
-	private boolean quitButt;
     private float waterHeight = 0;
-	public RoomScreen (SpriteBatch batch, boolean quitButt) {
-		this.quitButt = quitButt;
-	    if (this.quitButt) quit = new ld_button(250,125,500,250);
-	   
+    
+	private boolean rotating = false;
+    
+	public RoomScreen (SpriteBatch batch) {
 		this.batch = batch;
 		
 		//Load components required for wall management
@@ -84,13 +73,13 @@ public class RoomScreen extends ScreenAdapter {
 		
 		//Initialize walls
 		walls = new Wall[6];
-		walls[0] = new MainMenuWall(new Vector3(-1,0,0), quitButt);
-		walls[1] = new GameWall(new Vector3(1,0,0));
-		walls[4] = new OptionsWall(new Vector3(-1,0,0));
-		walls[5] = new CreditsWall(new Vector3(1,0,0));
+		walls[0] = new MainMenuWall(new Vector3(-1,0,0), this);
+		walls[1] = new GameWall(new Vector3(1,0,0), this);
+		walls[4] = new OptionsWall(new Vector3(-1,0,0), this);
+		walls[5] = new CreditsWall(new Vector3(1,0,0), this);
 		
-		walls[2] = new FloorWall(new Vector3(0,-1,0));//Width and height are both width because 3d!
-		walls[3] = new CeilingWall(new Vector3(0,-1,0));// ^
+		walls[2] = new FloorWall(new Vector3(0,-1,0), this);//Width and height are both width because 3d!
+		walls[3] = new CeilingWall(new Vector3(0,-1,0), this);// ^
 		
 		//CameraInputController camController = new CameraInputController(cam);
 		//Gdx.input.setInputProcessor(camController);
@@ -101,17 +90,15 @@ public class RoomScreen extends ScreenAdapter {
 		
 		super.show();
 	}
-	public boolean rotating = false;
+	
 	@Override
 	public void render (float delta) {
 		super.render(delta);
 		
-		if (!rotating) getInput();
-		
-		for (Wall wall : walls) {
-			if (wall == null)
-				continue;
-			wall.update(delta);
+		for (int i = 0; i < walls.length; i++) {
+			if (i == currentWall && !rotating)
+				walls[i].handleInput();
+			walls[i].update(delta);
 		}
 		
 		int attr = VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates;
@@ -170,50 +157,21 @@ public class RoomScreen extends ScreenAdapter {
 		 
 			 
 	}
-	private void getInput() {
-		float mx =Gdx.input.getX();
-		float my =Gdx.graphics.getHeight()-Gdx.input.getY();
-		Vector2 mouseVec = new Vector2(mx,my);
-		if(gameState == State.MAIN  && Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-			if (play.checkMouse(mouseVec)) gameState=State.GAME;
-			if (options.checkMouse(mouseVec)) gameState=State.OPTNS;
-			if (quitButt && quit.checkMouse(mouseVec)) Gdx.app.exit();
-			
-		}
-		//Old system
-		/* if(gameState!=State.MAIN && Gdx.input.isKeyPressed(Input.Keys.Z)){
-			 rotating=true;
-			 gameState=State.MAIN;
-		 }
-		 if(gameState!=State.OPTNS && Gdx.input.isKeyPressed(Input.Keys.X)){
-			 rotating=true;
-			 gameState=State.OPTNS;
-		 }
-		 if(gameState!=State.GAME && Gdx.input.isKeyPressed(Input.Keys.C)){
-			 rotating=true;
-			 gameState=State.GAME;
-		 }
-		 if((enabledCredits) && gameState!=State.CREDITS && Gdx.input.isKeyPressed(Input.Keys.V)){
-			 rotating=true;
-			 gameState=State.CREDITS;
-		 }*/
-		
-	}
 
 	private void rotateToCredits(float delta) {
 		if(rot < 270f){
-			rotateCam(250f*delta);
+			rotateCam(CAM_ROTATE_SPEED * delta);
 		} else if (rot > 271f){
-			rotateCam(-250f*delta);
+			rotateCam(-CAM_ROTATE_SPEED * delta);
 		} else rotating = false;
 		
 	}
 
 	private void rotateToMenu(float delta) {
 		if(rot < 0f){
-			rotateCam(250f*delta);
+			rotateCam(CAM_ROTATE_SPEED * delta);
 		} else if (rot > 1f){
-			rotateCam(-250f*delta);
+			rotateCam(-CAM_ROTATE_SPEED * delta);
 		} else rotating = false;
 		
 		
@@ -221,22 +179,24 @@ public class RoomScreen extends ScreenAdapter {
 
 	private void rotateToGame(float delta) {
 		if(rot < 180f){
-			rotateCam(250f*delta);
+			rotateCam(CAM_ROTATE_SPEED * delta);
 		} else if (rot > 181f){
-			rotateCam(-250f*delta);
+			rotateCam(-CAM_ROTATE_SPEED * delta);
 		} else rotating = false;
 		
 		
 	}
-	public void rotateToOptions(float delta){
+	
+	private void rotateToOptions(float delta){
 		if(rot < 90f){
-			rotateCam(250f*delta);
+			rotateCam(CAM_ROTATE_SPEED * delta);
 		} else if (rot > 91f){
-			rotateCam(-250f*delta);
+			rotateCam(-CAM_ROTATE_SPEED * delta);
 		} else rotating = false;
 		 
 	}
-	public void rotateCam(float a){
+	
+	private void rotateCam(float a){
 		cam.rotate(cam.up,a);
 		cam.update();
 		cam.normalizeUp();
@@ -268,6 +228,11 @@ public class RoomScreen extends ScreenAdapter {
 		currentWall++;
 		if (currentWall > MAX_CURRENT_WALL)
 			currentWall = 0;
+	}
+	
+	public void setState (State state) {
+		this.gameState = state;
+		this.currentWall = state.getWallNo();
 	}
 	
 }

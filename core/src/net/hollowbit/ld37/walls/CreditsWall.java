@@ -1,13 +1,16 @@
 package net.hollowbit.ld37.walls;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
+import net.hollowbit.ld37.Ld37Game;
+import net.hollowbit.ld37.screens.RoomScreen;
+
 public class CreditsWall extends Wall {
 
-	public CreditsWall(Vector3 dir) {
-		super(dir);
-		// TODO Auto-generated constructor stub
+	public CreditsWall(Vector3 dir, RoomScreen roomScreen) {
+		super(dir, roomScreen);
 	}
 
 	@Override
@@ -17,12 +20,16 @@ public class CreditsWall extends Wall {
 
 	@Override
 	protected void render (SpriteBatch batch) {
-		batch.setColor(0.3f, 0.3f, 0.3f, 1);
-		batch.draw(textures[5],0,0);
+		batch.draw(Ld37Game.getGame().getAssetManager().get("purp_b.png", Texture.class), 0, 0);
 	}
 
 	@Override
 	public void dispose () {
+		
+	}
+
+	@Override
+	public void handleInput() {
 		
 	}
 	

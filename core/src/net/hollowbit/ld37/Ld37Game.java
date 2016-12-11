@@ -1,7 +1,6 @@
 package net.hollowbit.ld37;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,10 +11,6 @@ import net.hollowbit.ld37.screens.RoomScreen;
 
 public class Ld37Game extends Game {
 	
-	private boolean quitButt;
-	public Ld37Game(boolean quitButt){
-		this.quitButt = quitButt;
-	}
 	SpriteBatch batch;
 	AssetManager assetManager;
 	BitmapFont font;
@@ -32,7 +27,7 @@ public class Ld37Game extends Game {
 		font = new BitmapFont();
 		font.setColor(new Color(1f,1f,0f,1f));
 		font.getData().setScale(0.5f);
-		this.setScreen(new RoomScreen(batch,quitButt));
+		this.setScreen(new RoomScreen(batch));
 	}
 
 	@Override
@@ -60,6 +55,13 @@ public class Ld37Game extends Game {
 		assetManager.load("badlogic.jpg", Texture.class);
 		assetManager.load("blank.png", Texture.class);
 		assetManager.load("water.png", Texture.class);
+		assetManager.load("ui_box.png", Texture.class);
+		
+		  //Walls
+		  assetManager.load("tv_a.png", Texture.class);
+		  assetManager.load("menu.png", Texture.class);
+		  assetManager.load("options.png", Texture.class);
+		  assetManager.load("purp_b.png", Texture.class);
 	}
 	
 	
