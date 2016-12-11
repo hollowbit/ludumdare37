@@ -6,17 +6,17 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 import net.hollowbit.ld37.Ld37Game;
@@ -46,6 +46,7 @@ public class RoomScreen extends ScreenAdapter {
 	private float x = 0, y = 0, z = 0f;
 	private float rot = 0f;
 	private ModelBuilder modelBuilder;
+	private float waterHeight = 0;
 	
 	public RoomScreen (SpriteBatch batch) {
 		this.batch = batch;
@@ -116,10 +117,16 @@ public class RoomScreen extends ScreenAdapter {
 		Model box = modelBuilder.end();
 		ModelInstance boxInstance = new ModelInstance(box);
 		
+		waterHeight += delta * 0.02;
+		Model water = modelBuilder.createBox(4f, 4f * waterHeight, 4f, new Material(IntAttribute.createCullFace(0), /*ColorAttribute.createDiffuse(0.1f, 0.2f, 0.85f, 0.5f), */ TextureAttribute.createDiffuse(Ld37Game.getGame().getAssetManager().get("water.png", Texture.class)), new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)), attr);
+		ModelInstance waterInstance = new ModelInstance(water);
+		waterInstance.transform.setToTranslation(0, (4f * waterHeight / 2) - 2, 0);
+		
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		mBatch.begin(cam);
 		mBatch.render(boxInstance);
+		mBatch.render(waterInstance);
 		mBatch.end();
 		
 		//Draw 2d overlay
