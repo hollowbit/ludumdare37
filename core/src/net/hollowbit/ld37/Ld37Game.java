@@ -59,6 +59,7 @@ public class Ld37Game extends Game {
 		//Images
 		assetManager.load("badlogic.jpg", Texture.class);
 		assetManager.load("blank.png", Texture.class);
+		assetManager.load("water.png", Texture.class);
 	}
 	
 	
