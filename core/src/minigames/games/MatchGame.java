@@ -18,7 +18,7 @@ public class MatchGame extends ld_minibase {
 	Texture match = new Texture("games/match.png");
 	Texture box = new Texture("games/match_box.png");
 	Texture fire = new Texture("games/fire.png");
-	
+	int strokes = 28;
 	float matchX= X_OFFSET+1, matchY = Y_OFFSET + 16;
 	boolean lit = false;
 	int tryCount = 0;
@@ -42,7 +42,7 @@ public class MatchGame extends ld_minibase {
 	protected void upPlay (float delta) {
 		//Update play here
 		//To end a game, call endGame(won);
-		if (tryCount >= 38)
+		if (tryCount >= strokes)
 			lit = true;
 		timer.count(delta);
 		if (timer.done) {
@@ -65,7 +65,7 @@ public class MatchGame extends ld_minibase {
 	@Override
 	public void handleInputPrivate (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
 		if (isZJustPressed){
-			if (tryCount < 38) tryCount++;
+			if (tryCount < strokes) tryCount++;
 			System.out.println(tryCount);
 		}
 			
