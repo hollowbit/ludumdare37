@@ -31,10 +31,10 @@ public class OptionsWall extends Wall {
 		batch.draw(Ld37Game.getGame().getAssetManager().get("options.png", Texture.class), 0, 0);
 		menuButton.render(batch);
 	
-		sfxMuteButton = new ld_button("SFX " + (Ld37Game.SFX_ON ? "OFF" : "ON"), SIZE / 2, SIZE / 2 + 5, 3);
+		sfxMuteButton = new ld_button("SFX " + (Ld37Game.SFX_ON ? "ON" : "OFF"), SIZE / 2, SIZE / 2 + 5, 3);
 		sfxMuteButton.render(batch);
 		
-		musicMuteButton = new ld_button("MUSIC " + (Ld37Game.MUSIC_ON ? "OFF" : "ON"), SIZE / 2, SIZE / 2 - 10, 3);
+		musicMuteButton = new ld_button("MUSIC " + (Ld37Game.MUSIC_ON ? "ON" : "OFF"), SIZE / 2, SIZE / 2 - 10, 3);
 		musicMuteButton.render(batch);
 	}
 

@@ -216,7 +216,6 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 		cam.update();
 		cam.normalizeUp();
 		rot+=a;
-		System.out.println(rot);
 	}
 	
 	@Override
@@ -246,8 +245,11 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 	}
 	
 	public void setState (State state) {
-		this.gameState = state;
-		this.currentWall = state.getWallNo();
+		if (this.gameState != state) {
+			this.rotating = true;
+			this.gameState = state;
+			this.currentWall = state.getWallNo();
+		}
 	}
 
 	@Override
