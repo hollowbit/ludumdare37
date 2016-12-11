@@ -3,6 +3,8 @@ package minigames;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import net.hollowbit.ld37.Ld37Game;
+
 public class game_jump extends ld_minibase {
 	public int TEX_R = 64;
 	public int R;
@@ -14,7 +16,7 @@ public class game_jump extends ld_minibase {
 	public ld_entity ent_char, ent_floor, ent_saw1, ent_saw2; 
 	public boolean grounded = false;
 	public double grav = 0.0098;
-	public double vs = 0;
+	public double vs = 100;
 	public int timer = 0;
 	public int maxTime = 500;
 	
@@ -37,20 +39,22 @@ public class game_jump extends ld_minibase {
 		batch.draw(saw, (float)ent_saw1.x, (float)ent_saw1.y, (float)ent_saw1.w, (float)ent_saw1.h);
 		batch.draw(saw, (float)ent_saw2.x, (float)ent_saw2.y, (float)ent_saw2.w, (float)ent_saw2.h);
 	}
-	
 	@Override
-	public void update(float delta){
+	public void upEnd(float delta){
+		
+	}
+	@Override
+	public void upPlay(float delta){
 		addTimer(delta);
-		if (vs < 0.12) vs-=grav*delta;
+		if (this.vs+this.grav*delta < 0.50)
+		      this.vs+=this.grav*delta;
+		this.y+=this.vs*delta;
 		if (ent_char.isIn(ent_floor)){
-			ent_char.y=ent_floor.h+ent_char.h;
-			vs=0;
-			grounded = true;
+			ent_char.y=ent_floor.h+ent_char.h+1;
+			this.grounded = true;
+	        this.vs = 0;
 		}
-		else{
-			grounded = false;
-			ent_char.y += vs;
-		}
+
 		ent_saw1.x+=this.s1s*delta;
 		ent_saw2.x+=this.s2s*delta;
 		
@@ -75,20 +79,23 @@ public class game_jump extends ld_minibase {
 		}
 
 	}
+	@Override
+	public void upTut(float delta){
+		
+	}
 	public void addTimer(float delta){
 		if (timer < maxTime){
 			timer+=delta*100;
 			
 		} else {
-			super.stop(timer);
+			super.minist = State.END;
 		}
 	}
 	
 	@Override
 	public void Zpressed(){
 		if (grounded){
-			ent_char.y+=10*R;
-			vs-=12;
+			vs=-12;
 			grounded = false;
 		}
 	}
