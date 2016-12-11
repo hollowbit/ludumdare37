@@ -63,7 +63,7 @@ public class MatchGame extends ld_minibase {
 	}
 
 	@Override
-	public void handleInput (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
+	public void handleInputPrivate (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
 		if (isZJustPressed){
 			if (tryCount < 38) tryCount++;
 			System.out.println(tryCount);
