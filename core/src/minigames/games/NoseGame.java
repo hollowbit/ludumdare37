@@ -22,7 +22,7 @@ public class NoseGame extends ld_minibase {
 	ld_timer timer;
 	
 	float fingerX = X_OFFSET, fingerY = Y_OFFSET + 2;
-	float fingerSpeed = 60;
+	float fingerSpeed = 100;
 	GlyphLayout tutLayout;
 	
 	boolean stopFinger = false;
