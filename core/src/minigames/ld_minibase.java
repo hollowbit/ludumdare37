@@ -112,7 +112,12 @@ public abstract class ld_minibase extends ld_entity {
 			Ld37Game.getGame().getFont().draw(batch, gameLoseTextLayout,(float) (w / 2 - gameLoseTextLayout.width / 2) + X_OFFSET,(float)( y + (h / 2 + gameLoseTextLayout.height / 2) - 10));
 	}
 	
-	public abstract void handleInput (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed);
+	public void handleInput (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
+		if (minist == State.PLAY)
+			this.handleInputPrivate(isZPressed, isXPressed, isZJustPressed, isXJustPressed);
+	}
+	
+	protected abstract void handleInputPrivate (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed);
 	
 	public interface GameEndHandler {
 		public abstract void handleGameEnd (boolean won);

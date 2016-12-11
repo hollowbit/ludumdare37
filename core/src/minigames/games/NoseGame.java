@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 
-import minigames.State;
 import minigames.ld_minibase;
 import minigames.ld_timer;
 import net.hollowbit.ld37.Ld37Game;
@@ -90,8 +89,8 @@ public class NoseGame extends ld_minibase {
 	}
 
 	@Override
-	public void handleInput (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
-		if (isZJustPressed && minist == State.PLAY)
+	public void handleInputPrivate (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
+		if (isZJustPressed)
 			stopFinger = true;
 	}
 
