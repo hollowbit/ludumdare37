@@ -13,10 +13,10 @@ public class game_jump extends ld_minibase {
 	public double s2s; //saw1 speed vector
 	public ld_entity ent_char, ent_floor, ent_saw1, ent_saw2; 
 	public boolean grounded = false;
-	public double grav = -0.0098;
+	public double grav = 0.0098;
 	public double vs = 0;
 	public int timer = 0;
-	public int maxTime = 5000;
+	public int maxTime = 500;
 	
 	public game_jump(int size,int x, int y, int w, int h){
 		super(x,y,w,h);
@@ -24,9 +24,9 @@ public class game_jump extends ld_minibase {
 		ent_char = new ld_entity(this.x+this.w/2,this.y+12*R,7*R,7*R);
 		ent_floor = new ld_entity(this.x,this.y,this.w,11*R);
 		ent_saw1 = new ld_entity(this.x+3*R,this.y+11*R,11*R,6*R);
-		s1s = 1000;
+		s1s = 40;
 		ent_saw2 = new ld_entity(this.x+(52-14)*R,this.y+11*R,11*R,6*R);
-		s2s = -1000;
+		s2s = -40;
 	}
 	
 	@Override
@@ -41,9 +41,9 @@ public class game_jump extends ld_minibase {
 	@Override
 	public void update(float delta){
 		addTimer(delta);
-		if (vs < 0.12) vs+=grav;
+		if (vs < 0.12) vs-=grav*delta;
 		if (ent_char.isIn(ent_floor)){
-			//ent_char.y=ent_floor.y;
+			ent_char.y=ent_floor.h+ent_char.h;
 			vs=0;
 			grounded = true;
 		}
@@ -55,13 +55,21 @@ public class game_jump extends ld_minibase {
 		ent_saw2.x+=this.s2s*delta;
 		
 		if (ent_saw1.x <= 6*R ||
-			ent_saw1.x + ent_saw1.w >= 58*R)
+			ent_saw1.x + ent_saw1.w >= 58*R){
+			if (ent_saw1.x <= 6*R)
+				ent_saw1.x = 6*R+R;
+			else
+				ent_saw1.x = 58*R - ent_saw1.w - R;
 			s1s=-s1s;
-		
+		}
 		if (ent_saw2.x <= 6*R ||
-			ent_saw2.x + ent_saw2.w >= 58*R)
+			ent_saw2.x + ent_saw2.w >= 58*R){
+			if (ent_saw2.x <= 6*R)
+				ent_saw2.x = 6*R+R;
+			else
+				ent_saw2.x = 58*R - ent_saw2.w - R;
 			s2s=-s2s;
-		
+		}
 		if (ent_char.isIn(ent_saw1) || ent_char.isIn(ent_saw2)){
 			super.stop(timer);
 		}
@@ -69,20 +77,19 @@ public class game_jump extends ld_minibase {
 	}
 	public void addTimer(float delta){
 		if (timer < maxTime){
-			timer+=delta*1000;
-			System.out.println(timer);
+			timer+=delta*100;
+			
 		} else {
 			super.stop(timer);
-			
 		}
 	}
 	
 	@Override
 	public void Zpressed(){
 		if (grounded){
-			vs-=120;
+			ent_char.y+=10*R;
+			vs-=12;
 			grounded = false;
-			System.out.println("presseD");
 		}
 	}
 	

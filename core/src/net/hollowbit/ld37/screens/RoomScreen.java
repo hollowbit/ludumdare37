@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 import net.hollowbit.ld37.Ld37Game;
@@ -56,6 +57,7 @@ public class RoomScreen extends ScreenAdapter {
 		cam.far = 0;
 		cam.position.set(x, y, z);
 		cam.lookAt(0, 0, 0);
+		cam.up.set(Vector3.Y);
 		cam.update();
 		
 		cam2d = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -66,7 +68,7 @@ public class RoomScreen extends ScreenAdapter {
 		
 		//Initialize walls
 		walls = new Wall[6];
-		walls[0] = new MainMenuWall(new Vector3(1,0,0));
+		walls[0] = new MainMenuWall(new Vector3(-1,0,0));
 		walls[1] = new GameWall(new Vector3(1,0,0));
 		walls[4] = new OptionsWall(new Vector3(-1,0,0));
 		walls[5] = new CreditsWall(new Vector3(1,0,0));
@@ -117,13 +119,17 @@ public class RoomScreen extends ScreenAdapter {
 		mBatch.begin(cam);
 		mBatch.render(boxInstance);
 		mBatch.end();
-		
+		System.out.println(-getCameraCurrentXYAngle(cam) + 180);
 		//Draw 2d overlay
 		batch.setProjectionMatrix(cam2d.combined);
 		batch.begin();
 		Ld37Game.getGame().getFont().draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
 		Ld37Game.getGame().getFont().draw(batch, "X: " + x + "  Y: " + y + "  Z: " + z, 10, 40);
 		batch.end();
+	}
+	public float getCameraCurrentXYAngle(PerspectiveCamera cam2)
+	{
+	    return (float)Math.atan2(cam2.up.x, cam2.up.z)*MathUtils.radiansToDegrees;
 	}
 	
 	@Override

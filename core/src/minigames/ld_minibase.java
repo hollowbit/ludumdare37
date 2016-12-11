@@ -17,9 +17,7 @@ public abstract class ld_minibase extends ld_entity
 	boolean update = false;
 	
 	public void drawBgrnd(SpriteBatch batch){			
-		batch.draw(this.bgrnd,
-				(int)this.x,
-				(int)this.y);
+		batch.draw(this.bgrnd,(int)this.x,(int)this.y);
 	}
 	public void render(SpriteBatch batch){		//To be overwritten
 		return;

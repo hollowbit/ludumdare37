@@ -1,7 +1,9 @@
 package net.hollowbit.ld37;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,9 +24,10 @@ public class Ld37Game extends Game {
 		assetManager = new AssetManager();
 		this.loadAssets();
 		assetManager.finishLoading();
-		
+
 		font = new BitmapFont();
-		
+		font.setColor(new Color(1f,1f,0f,1f));
+		font.getData().setScale(0.5f);
 		this.setScreen(new RoomScreen(batch));
 	}
 

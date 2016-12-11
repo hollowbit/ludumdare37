@@ -53,7 +53,7 @@ public abstract class Wall {
 		fbo.end();
 		
 		TextureRegion fboTexture = new TextureRegion(fbo.getColorBufferTexture());
-		fboTexture.flip(false, true);
+		fboTexture.flip(false, false);
 		return fboTexture;
 	}
 	
