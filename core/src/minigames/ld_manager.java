@@ -6,8 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import minigames.games.MathGame;
-import minigames.games.NoseGame;
+import minigames.games.MatchGame;
 import net.hollowbit.ld37.screens.RoomScreen;
 
 public class ld_manager implements ld_minibase.GameEndHandler {
@@ -49,7 +48,7 @@ public class ld_manager implements ld_minibase.GameEndHandler {
 	public ld_minibase chooseOne(int choice){
 		switch (choice){
 		default:
-			return (new MathGame(this, roomScreen));
+			return (new MatchGame(this, roomScreen));
 		}
 	}
 
