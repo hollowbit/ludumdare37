@@ -11,20 +11,19 @@ import minigames.ld_timer;
 import net.hollowbit.ld37.Ld37Game;
 
 public class JumpGame extends ld_minibase {
-
-	private static final int FINGER_OFFSET = 9;
-	private static final int NOSTRIL_1_OFFSET = 3;
-	private static final int NOSTRIL_2_OFFSET = 14;
-	private static final int NOSTRIL_WIDTH = 6;
+	
+	private static final float GRAVITY = 30f;
+	private static final float JUMP_SPEED = 25f;
 	
 	Texture saw = new Texture("games/saw.png");
 	Texture dude = new Texture("games/character.png");
 	Texture ground = new Texture("games/floor.png");
 	ld_timer timer;
 	
-	float dudeX = X_OFFSET, dudeY = Y_OFFSET + 11;
+	float dudeX = X_OFFSET, dudeY = ground.getHeight();
 	float dudeSpeed = -0.2f, sawSpeed;
-	float saw1X, saw2X;
+	float saw1X = 1, saw2X = WIDTH - saw.getWidth() - 3;
+	float saw1Speed = 23, saw2Speed = -23;
 	GlyphLayout tutLayout;
 	
 	boolean stopFinger = false;
@@ -46,17 +45,43 @@ public class JumpGame extends ld_minibase {
 
 	@Override
 	protected void upPlay (float delta) {
-		if (dudeSpeed!=0){
-		dudeY+=dudeSpeed*delta*1000;
-		dudeSpeed-=delta;
-		}
-		if (dudeY > Y_OFFSET +11);
-			
-		else{
-			dudeY = Y_OFFSET + 11;
-			grounded = true;
+		dudeSpeed -= GRAVITY * delta;
+		
+		dudeY += dudeSpeed * delta;
+		if (dudeY < ground.getHeight()) {
+			dudeY = ground.getHeight();
 			dudeSpeed = 0;
+			grounded = true;
 		}
+		
+		saw1X += saw1Speed * delta;
+		if (saw1X < 1) {
+			saw1X = 1;
+			saw1Speed = -saw1Speed;
+		}
+		
+		if (saw1X > WIDTH - saw.getWidth() - 3) {
+			saw1X = WIDTH - saw.getWidth() - 3;
+			saw1Speed = -saw1Speed;
+		}
+		
+		saw2X += saw2Speed * delta;
+		if (saw2X < 1) {
+			saw2X = 1;
+			saw2Speed = -saw2Speed;
+		}
+		
+		if (saw2X > WIDTH - saw.getWidth() - 3) {
+			saw2X = WIDTH - saw.getWidth() - 3;
+			saw2Speed = -saw2Speed;
+		}
+		
+		dudeX = WIDTH / 2 - dude.getWidth() / 2;
+		boolean collidesWithSaw1 = dudeX < saw1X + saw.getWidth() / 4 + saw.getWidth() / 2 && dudeX + dude.getWidth() > saw1X + saw.getWidth() / 4 && dudeY < ground.getHeight() + saw.getHeight();
+		boolean collidesWithSaw2 = dudeX < saw2X + saw.getWidth() / 4 + saw.getWidth() / 2 && dudeX + dude.getWidth() > saw2X + saw.getWidth() / 4 && dudeY < ground.getHeight() + saw.getHeight();
+		
+		if (collidesWithSaw1 || collidesWithSaw2)
+			endGame(false);
 		
 		timer.count(delta);
 		if (timer.done) {
@@ -66,8 +91,11 @@ public class JumpGame extends ld_minibase {
 
 	@Override
 	protected void renPlay (SpriteBatch batch) {
-		batch.draw(dude, X_OFFSET + WIDTH / 2 - dude.getWidth() / 2, dudeY);
+		batch.draw(dude, X_OFFSET + WIDTH / 2 - dude.getWidth() / 2, Y_OFFSET + dudeY);
 		batch.draw(ground, X_OFFSET, Y_OFFSET);
+
+		batch.draw(saw, X_OFFSET + saw1X, Y_OFFSET + ground.getHeight());
+		batch.draw(saw, X_OFFSET + saw2X, Y_OFFSET + ground.getHeight());
 		
 		GlyphLayout timerLayout = new GlyphLayout(Ld37Game.getGame().getFont(), String.format("%.1f", timer.maxTime - timer.timer) + "s");
 		Ld37Game.getGame().getFont().draw(batch, timerLayout, X_OFFSET + WIDTH - timerLayout.width, Y_OFFSET+ HEIGHT );
@@ -82,7 +110,7 @@ public class JumpGame extends ld_minibase {
 	public void handleInputPrivate (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
 		if (isZJustPressed && grounded){
 			grounded = false;
-			dudeSpeed+=12;
+			dudeSpeed += JUMP_SPEED;
 			Ld37Game.getGame().playSfx("games/miss.wav");
 		}
 	}
