@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import minigames.games.KayakGame;
+import minigames.games.*;
 import net.hollowbit.ld37.screens.RoomScreen;
 
 public class ld_manager implements ld_minibase.GameEndHandler {
@@ -19,7 +19,7 @@ public class ld_manager implements ld_minibase.GameEndHandler {
 		getNextGame();
 	}
 	
-	private void getNextGame () {
+	public void getNextGame () {
 		currentGame = getRandomGame();
 		currentGame.start();
 	}
@@ -39,22 +39,27 @@ public class ld_manager implements ld_minibase.GameEndHandler {
 	
 	private ld_minibase getRandomGame(){
 		Random randomGenerator = new Random();
-		int r = randomGenerator.nextInt(3);
+		int r = randomGenerator.nextInt(5);
 		return chooseOne(r);
 		
 	}
 	
 	
 	public ld_minibase chooseOne(int choice){
-		return (new KayakGame(this, roomScreen));
-		/*switch (choice){
+		switch (choice){
 		default:
 			return (new MatchGame(this, roomScreen));
 		case 0:
 			return (new MathGame(this, roomScreen));
 		case 1:
 			return (new NoseGame(this, roomScreen));
-		}*/
+		case 2:
+			return (new KayakGame(this, roomScreen));
+		case 3:
+			return (new JumpGame(this, roomScreen));
+		case 4:
+			return (new MatchGame(this, roomScreen));
+		}
 	}
 
 	@Override

@@ -39,6 +39,10 @@ public class GameWall extends Wall {
 	public void dispose () {
 
 	}
+	
+	public void getNextGame () {
+		ldManager.getNextGame();
+	}
 
 	@Override
 	public void handleInput() {

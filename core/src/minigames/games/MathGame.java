@@ -90,8 +90,10 @@ public class MathGame extends ld_minibase {
 
 	@Override
 	public void handleInputPrivate (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
-		if (isZJustPressed)
+		if (isZJustPressed) {
 			isSelected = true;
+			Ld37Game.getGame().playSfx("games/hit.wav");
+		}
 			
 	}
 

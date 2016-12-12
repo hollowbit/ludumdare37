@@ -37,8 +37,10 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 	private static final int CAM_ROTATE_SPEED = 120;
 	private static final float WATER_HEIGHT_CHANGE = 0.1f;
 	private static final float WATER_MOVE_SPEED = 0.05f;
-	private static final int GAMES_TO_WIN = 10;
-	private static final float DEATH_WATER_LEVEL = 0.6f;
+	public static final int GAMES_TO_WIN = 10;
+	private static final float DEATH_WATER_LEVEL = 0.65f;
+	private static final int MAX_HEALTH = 15;
+	private static final int BUBBLE_SIZE = 50;
 	
 	private Wall[] walls;
 	
@@ -61,6 +63,9 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 	private int score = 0;
     private float gameOverOpacity = 0;
     private boolean gameover = false;
+    private int health = MAX_HEALTH;
+    private float healthTimer = 0;
+    private float scoreTimer = 0;
 	
 	public RoomScreen (SpriteBatch batch) {
 		this.batch = batch;
@@ -142,8 +147,21 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 				waterHeight = waterHeightGoal;
 		}
 		
-		if (waterHeight >= DEATH_WATER_LEVEL)
+		if (waterHeight >= DEATH_WATER_LEVEL) {
+			healthTimer += delta;
+			if (healthTimer >= 1) {
+				healthTimer = 0;
+				health--;
+			}
+		} else {
+			health = MAX_HEALTH;
+			healthTimer = 0;
+		}
+		
+		if (health <= 0) {
 			gameover = true;
+			((GameWall) walls[1]).getNextGame();
+		}
 		
 		if (score >= GAMES_TO_WIN)
 			setState(State.CREDITS);
@@ -165,8 +183,14 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 		batch.setProjectionMatrix(cam2d.combined);
 		batch.begin();
 		
-		if (score < GAMES_TO_WIN)
-			Ld37Game.getGame().getFontHd().draw(batch, (GAMES_TO_WIN - score) + " trials left.", 10, 40);
+		scoreTimer -= delta;
+		if (scoreTimer < 0)
+			scoreTimer = 0;
+		
+		if (score < GAMES_TO_WIN && scoreTimer > 0) {
+			GlyphLayout scoreLayout = new GlyphLayout(Ld37Game.getGame().getFontHd(), (GAMES_TO_WIN - score) + " trials left.");
+			Ld37Game.getGame().getFontHd().draw(batch, scoreLayout, Gdx.graphics.getWidth() / 2 - scoreLayout.width / 2, 40);
+		}
 
 		if (gameover) {
 			batch.setColor(1, 0, 0, gameOverOpacity);
@@ -190,6 +214,13 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 				if (Gdx.input.justTouched())
 					reset();
 			}
+		}
+		
+
+		if (waterHeight >= DEATH_WATER_LEVEL) {
+			float bubblesX = MAX_HEALTH * (BUBBLE_SIZE + 5);
+			for (int i = 0; i < health; i++)
+				batch.draw(Ld37Game.getGame().getAssetManager().get("real_bubble.png", Texture.class), (Gdx.graphics.getWidth() / 2 - bubblesX / 2) + i * (BUBBLE_SIZE + 5), 30 + BUBBLE_SIZE, BUBBLE_SIZE, BUBBLE_SIZE);
 		}
 		
 		batch.end();
@@ -302,6 +333,7 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 		
 		if (waterHeightGoal < 0)
 			waterHeightGoal = 0;
+		scoreTimer = 2;
 	}
 	
 	public void reset () {
@@ -309,10 +341,16 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 		score = 0;
 	    gameOverOpacity = 0;
 	    gameover = false;
+	    health = MAX_HEALTH;
+	    healthTimer = 0;
 	}
 	
 	public boolean isRotating () {
 		return rotating;
+	}
+	
+	public int getScore () {
+		return score;
 	}
 	
 }
