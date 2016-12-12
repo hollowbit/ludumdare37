@@ -71,10 +71,11 @@ public class Ld37Game extends Game {
 	
 	private void loadAssets () {
 		//Images
-		assetManager.load("badlogic.jpg", Texture.class);
 		assetManager.load("blank.png", Texture.class);
 		assetManager.load("water.png", Texture.class);
 		assetManager.load("ui_box.png", Texture.class);
+		assetManager.load("real_bubble.png", Texture.class);
+		assetManager.load("fish.png", Texture.class);
 		
 		  //Walls
 		  assetManager.load("tv_a.png", Texture.class);

@@ -311,4 +311,8 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 	    gameover = false;
 	}
 	
+	public boolean isRotating () {
+		return rotating;
+	}
+	
 }
