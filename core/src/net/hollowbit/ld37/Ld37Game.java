@@ -1,6 +1,7 @@
 package net.hollowbit.ld37;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -19,6 +20,7 @@ public class Ld37Game extends Game {
 	SpriteBatch batch;
 	AssetManager assetManager;
 	BitmapFont font;
+	BitmapFont fontHd;
 	
 	@Override
 	public void create () {
@@ -31,7 +33,8 @@ public class Ld37Game extends Game {
 		assetManager.get("alpha_wave_m0nster.wav", Music.class).play();
 		assetManager.get("alpha_wave_m0nster.wav", Music.class).setLooping(true);
 
-		font = new BitmapFont();
+		font = new BitmapFont(Gdx.files.internal("main.fnt"));
+		fontHd = new BitmapFont(Gdx.files.internal("hd.fnt"));
 		font.setColor(new Color(1f,1f,0f,1f));
 		font.getData().setScale(0.5f);
 		this.setScreen(new RoomScreen(batch));
@@ -60,6 +63,10 @@ public class Ld37Game extends Game {
 	
 	public BitmapFont getFont () {
 		return font;
+	}
+	
+	public BitmapFont getFontHd () {
+		return fontHd;
 	}
 	
 	private void loadAssets () {

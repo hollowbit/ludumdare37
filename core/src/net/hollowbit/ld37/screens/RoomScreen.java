@@ -36,6 +36,7 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 	private static final int CAM_ROTATE_SPEED = 120;
 	private static final float WATER_HEIGHT_CHANGE = 0.1f;
 	private static final float WATER_MOVE_SPEED = 0.05f;
+	private static final int GAMES_TO_WIN = 20;
 	
 	private Wall[] walls;
 	
@@ -54,6 +55,8 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
     private float waterHeightGoal = 0;
     
 	private boolean rotating = false;
+	
+	private int score = 0;
     
 	public RoomScreen (SpriteBatch batch) {
 		this.batch = batch;
@@ -80,7 +83,7 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 		walls[0] = new MainMenuWall(new Vector3(-1,0,0), this);
 		walls[1] = new GameWall(new Vector3(1,0,0), this);
 		walls[4] = new OptionsWall(new Vector3(-1,0,0), this);
-		walls[5] = new CreditsWall(new Vector3(1,0,0), this);
+		walls[5] = new CreditsWall(new Vector3(-1,0,0), this);
 		
 		walls[2] = new FloorWall(new Vector3(0,-1,0), this);//Width and height are both width because 3d!
 		walls[3] = new CeilingWall(new Vector3(0,-1,0), this);// ^
@@ -152,8 +155,7 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 		batch.setProjectionMatrix(cam2d.combined);
 		batch.begin();
 		
-		Ld37Game.getGame().getFont().draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
-		Ld37Game.getGame().getFont().draw(batch, "X: " + x + "  Y: " + y + "  Z: " + z, 10, 40);
+		Ld37Game.getGame().getFontHd().draw(batch, (GAMES_TO_WIN - score) + " trials left.", 10, 40);
 		batch.end();
 		switch (gameState){
 		case MAIN:
@@ -254,10 +256,13 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 
 	@Override
 	public void handleGameEnd (boolean won) {
-		if (won)
+		if (won) {
 			waterHeightGoal -= WATER_HEIGHT_CHANGE;
-		else
+			score++;
+		} else {
 			waterHeightGoal += WATER_HEIGHT_CHANGE;
+			score = 0;
+		}
 		
 		if (waterHeightGoal < 0)
 			waterHeightGoal = 0;
