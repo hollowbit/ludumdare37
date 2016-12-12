@@ -36,7 +36,7 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 	private static final int CAM_ROTATE_SPEED = 120;
 	private static final float WATER_HEIGHT_CHANGE = 0.1f;
 	private static final float WATER_MOVE_SPEED = 0.05f;
-	private static final int GAMES_TO_WIN = 20;
+	private static final int GAMES_TO_WIN = 1;
 	
 	private Wall[] walls;
 	
@@ -138,6 +138,9 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 				waterHeight = waterHeightGoal;
 		}
 		
+		if (score >= GAMES_TO_WIN)
+			setState(State.CREDITS);
+		
 		Model water = modelBuilder.createBox(4f, 4f * waterHeight, 4f, new Material(IntAttribute.createCullFace(0), ColorAttribute.createDiffuse(0.2f, 0.4f, 1.7f, 0.5f),  TextureAttribute.createDiffuse(Ld37Game.getGame().getAssetManager().get("water.png", Texture.class)), new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)), attr);
 		ModelInstance waterInstance = new ModelInstance(water);
 		waterInstance.transform.setToTranslation(0, (2.01f * waterHeight / 2) - 2, 0);
@@ -155,7 +158,9 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 		batch.setProjectionMatrix(cam2d.combined);
 		batch.begin();
 		
-		Ld37Game.getGame().getFontHd().draw(batch, (GAMES_TO_WIN - score) + " trials left.", 10, 40);
+		if (score < GAMES_TO_WIN)
+			Ld37Game.getGame().getFontHd().draw(batch, (GAMES_TO_WIN - score) + " trials left.", 10, 40);
+		
 		batch.end();
 		switch (gameState){
 		case MAIN:
@@ -266,6 +271,11 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 		
 		if (waterHeightGoal < 0)
 			waterHeightGoal = 0;
+	}
+	
+	public void reset () {
+		waterHeightGoal = 0;
+		score = 0;
 	}
 	
 }
