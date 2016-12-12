@@ -3,6 +3,7 @@ package net.hollowbit.ld37;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -80,7 +81,7 @@ public class Ld37Game extends Game {
 		  
 		//Sounds
 		assetManager.load("alpha_wave_m0nster.wav", Music.class);
-		//assetManager.load("soundfx.wav", Sound.class);//How to load a sound effect
+		assetManager.load("games/hit.wav", Sound.class);//How to load a sound effect
 	}
 	
 	public void playSfx (String location) {

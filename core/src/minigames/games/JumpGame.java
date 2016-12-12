@@ -23,12 +23,12 @@ public class JumpGame extends ld_minibase {
 	ld_timer timer;
 	
 	float dudeX = X_OFFSET, dudeY = Y_OFFSET + 11;
-	float dudeSpeed, sawSpeed;
+	float dudeSpeed = 0.2f, sawSpeed;
 	float saw1X, saw2X;
 	GlyphLayout tutLayout;
 	
 	boolean stopFinger = false;
-	private boolean grounded;
+	private boolean grounded = true;
 	
 	public JumpGame (GameEndHandler... gameEndHandlers) {
 		super(gameEndHandlers);
@@ -46,8 +46,13 @@ public class JumpGame extends ld_minibase {
 
 	@Override
 	protected void upPlay (float delta) {
+	
+		if (dudeY == Y_OFFSET +11){
+			grounded = true;
+		}else
+		dudeY-=dudeSpeed*delta;
 		
-		
+			
 		timer.count(delta);
 		if (timer.done) {
 			endGame(true);
@@ -70,9 +75,11 @@ public class JumpGame extends ld_minibase {
 
 	@Override
 	public void handleInputPrivate (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
-		if (isZJustPressed && grounded){
+		if (isZJustPressed){
 			dudeSpeed+=12;
-			//Ld37Game.getGame().playSfx("hit.wav");
+			dudeY+=1;
+			Ld37Game.getGame().playSfx("hit.wav");
+			grounded = false;
 		}
 	}
 
