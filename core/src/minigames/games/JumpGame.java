@@ -78,9 +78,10 @@ public class JumpGame extends ld_minibase {
 		boolean collidesWithSaw1 = dudeX < saw1X + saw.getWidth() / 4 + saw.getWidth() / 2 && dudeX + dude.getWidth() > saw1X + saw.getWidth() / 4 && dudeY < ground.getHeight() + saw.getHeight();
 		boolean collidesWithSaw2 = dudeX < saw2X + saw.getWidth() / 4 + saw.getWidth() / 2 && dudeX + dude.getWidth() > saw2X + saw.getWidth() / 4 && dudeY < ground.getHeight() + saw.getHeight();
 		
-		if (collidesWithSaw1 || collidesWithSaw2)
+		if (collidesWithSaw1 || collidesWithSaw2){
+			Ld37Game.getGame().playSfx("games/miss.wav");
 			endGame(false);
-		
+		}
 		timer.count(delta);
 		if (timer.done) {
 			endGame(true);
@@ -109,7 +110,7 @@ public class JumpGame extends ld_minibase {
 		if (isZJustPressed && grounded){
 			grounded = false;
 			dudeSpeed += JUMP_SPEED;
-			Ld37Game.getGame().playSfx("games/miss.wav");
+			Ld37Game.getGame().playSfx("games/hit.wav");
 		}
 	}
 

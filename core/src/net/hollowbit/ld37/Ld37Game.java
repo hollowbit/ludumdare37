@@ -94,7 +94,7 @@ public class Ld37Game extends Game {
 	
 	public void playSfx (String location) {
 		if (SFX_ON)
-			assetManager.get("alpha_wave_m0nster.wav", Music.class).play();
+			assetManager.get(location, Sound.class).play();
 	}
 	
 	

@@ -21,7 +21,7 @@ public class KayakGame extends ld_minibase {
 	int strokes = 28;
 
 	boolean canForce = true;
-	int tryCount = 0;
+
 	ld_timer timer1, timer2;
 	
 	GlyphLayout tutLayout;
@@ -40,7 +40,7 @@ public class KayakGame extends ld_minibase {
 
 	@Override
 	public void start () {
-		tryCount = 0;
+
 	}
 
 	@Override
@@ -64,6 +64,7 @@ public class KayakGame extends ld_minibase {
 			timer2 = new ld_timer(0.3f);
 			kayak2Y+=1;
 			kayak2 = (kayak2 == kayak_idle)?kayak_left:(kayak2 == kayak_left)?kayak_right:kayak_left;
+			Ld37Game.getGame().playSfx("games/miss.wav");
 		}
 	}
 
@@ -86,14 +87,13 @@ public class KayakGame extends ld_minibase {
 				kayak1 = kayak_left;
 				canForce=false;
 				kayak1Y+=1;
+				Ld37Game.getGame().playSfx("games/hit.wav");
 			} else if ((kayak1 == kayak_left || kayak1 == kayak_idle) && isXJustPressed){
 				kayak1 = kayak_right;
 				canForce=false;
 				kayak1Y+=1;
+				Ld37Game.getGame().playSfx("games/hit.wav");
 			} 
-		
-			System.out.println(tryCount);
-			
 		}
 			
 	}
