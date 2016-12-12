@@ -23,7 +23,7 @@ public class JumpGame extends ld_minibase {
 	ld_timer timer;
 	
 	float dudeX = X_OFFSET, dudeY = Y_OFFSET + 11;
-	float dudeSpeed = 0.2f, sawSpeed;
+	float dudeSpeed = -0.2f, sawSpeed;
 	float saw1X, saw2X;
 	GlyphLayout tutLayout;
 	
@@ -46,13 +46,18 @@ public class JumpGame extends ld_minibase {
 
 	@Override
 	protected void upPlay (float delta) {
-	
-		if (dudeY == Y_OFFSET +11){
-			grounded = true;
-		}else
-		dudeY-=dudeSpeed*delta;
-		
+		if (dudeSpeed!=0){
+		dudeY+=dudeSpeed*delta*1000;
+		dudeSpeed-=delta;
+		}
+		if (dudeY > Y_OFFSET +11);
 			
+		else{
+			dudeY = Y_OFFSET + 11;
+			grounded = true;
+			dudeSpeed = 0;
+		}
+		
 		timer.count(delta);
 		if (timer.done) {
 			endGame(true);
@@ -61,11 +66,11 @@ public class JumpGame extends ld_minibase {
 
 	@Override
 	protected void renPlay (SpriteBatch batch) {
-		batch.draw(dude, X_OFFSET + WIDTH / 2 - dude.getWidth() / 2, Y_OFFSET + 11);
+		batch.draw(dude, X_OFFSET + WIDTH / 2 - dude.getWidth() / 2, dudeY);
 		batch.draw(ground, X_OFFSET, Y_OFFSET);
 		
 		GlyphLayout timerLayout = new GlyphLayout(Ld37Game.getGame().getFont(), String.format("%.1f", timer.maxTime - timer.timer) + "s");
-		Ld37Game.getGame().getFont().draw(batch, timerLayout, X_OFFSET + WIDTH / 2 - timerLayout.width / 2, Y_OFFSET);
+		Ld37Game.getGame().getFont().draw(batch, timerLayout, X_OFFSET + WIDTH - timerLayout.width, Y_OFFSET+ HEIGHT );
 	}
 
 	@Override
@@ -75,11 +80,10 @@ public class JumpGame extends ld_minibase {
 
 	@Override
 	public void handleInputPrivate (boolean isZPressed, boolean isXPressed, boolean isZJustPressed, boolean isXJustPressed) {
-		if (isZJustPressed){
-			dudeSpeed+=12;
-			dudeY+=1;
-			Ld37Game.getGame().playSfx("hit.wav");
+		if (isZJustPressed && grounded){
 			grounded = false;
+			dudeSpeed+=12;
+			Ld37Game.getGame().playSfx("games/miss.wav");
 		}
 	}
 

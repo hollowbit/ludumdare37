@@ -82,6 +82,7 @@ public class Ld37Game extends Game {
 		//Sounds
 		assetManager.load("alpha_wave_m0nster.wav", Music.class);
 		assetManager.load("games/hit.wav", Sound.class);//How to load a sound effect
+		assetManager.load("games/miss.wav", Sound.class);
 	}
 	
 	public void playSfx (String location) {
