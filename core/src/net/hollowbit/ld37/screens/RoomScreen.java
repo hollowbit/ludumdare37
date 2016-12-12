@@ -80,7 +80,7 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 		walls[0] = new MainMenuWall(new Vector3(-1,0,0), this);
 		walls[1] = new GameWall(new Vector3(1,0,0), this);
 		walls[4] = new OptionsWall(new Vector3(-1,0,0), this);
-		walls[5] = new CreditsWall(new Vector3(1,0,0), this);
+		walls[5] = new CreditsWall(new Vector3(-1,0,0), this);
 		
 		walls[2] = new FloorWall(new Vector3(0,-1,0), this);//Width and height are both width because 3d!
 		walls[3] = new CeilingWall(new Vector3(0,-1,0), this);// ^
