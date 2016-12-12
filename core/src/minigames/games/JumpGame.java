@@ -22,7 +22,7 @@ public class JumpGame extends ld_minibase {
 	
 	float dudeX = X_OFFSET, dudeY = ground.getHeight();
 	float dudeSpeed = -0.2f, sawSpeed;
-	float saw1X = 1, saw2X = WIDTH - saw.getWidth() - 3;
+	float saw1X = 1, saw2X = WIDTH - saw.getWidth() - 2;
 	float saw1Speed = 23, saw2Speed = -23;
 	GlyphLayout tutLayout;
 	
@@ -32,8 +32,6 @@ public class JumpGame extends ld_minibase {
 	public JumpGame (GameEndHandler... gameEndHandlers) {
 		super(gameEndHandlers);
 		timer = new ld_timer(5);
-		
-
 		
 		tutLayout = new GlyphLayout(Ld37Game.getGame().getFont(), "Press Z to jump!", Color.ORANGE, WIDTH, Align.left, true);
 	}

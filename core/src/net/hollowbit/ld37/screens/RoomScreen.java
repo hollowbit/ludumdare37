@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -36,7 +37,8 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 	private static final int CAM_ROTATE_SPEED = 120;
 	private static final float WATER_HEIGHT_CHANGE = 0.1f;
 	private static final float WATER_MOVE_SPEED = 0.05f;
-	private static final int GAMES_TO_WIN = 1;
+	private static final int GAMES_TO_WIN = 10;
+	private static final float DEATH_WATER_LEVEL = 0.6f;
 	
 	private Wall[] walls;
 	
@@ -57,7 +59,9 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 	private boolean rotating = false;
 	
 	private int score = 0;
-    
+    private float gameOverOpacity = 0;
+    private boolean gameover = false;
+	
 	public RoomScreen (SpriteBatch batch) {
 		this.batch = batch;
 		
@@ -138,6 +142,9 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 				waterHeight = waterHeightGoal;
 		}
 		
+		if (waterHeight >= DEATH_WATER_LEVEL)
+			gameover = true;
+		
 		if (score >= GAMES_TO_WIN)
 			setState(State.CREDITS);
 		
@@ -160,6 +167,30 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 		
 		if (score < GAMES_TO_WIN)
 			Ld37Game.getGame().getFontHd().draw(batch, (GAMES_TO_WIN - score) + " trials left.", 10, 40);
+
+		if (gameover) {
+			batch.setColor(1, 0, 0, gameOverOpacity);
+			batch.draw(Ld37Game.getGame().getAssetManager().get("blank.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			batch.setColor(1, 1, 1, 1);
+			if (gameOverOpacity < 1)
+				gameOverOpacity += delta;
+			
+			if (gameOverOpacity >= 1) {
+				setState(State.MAIN);
+				gameOverOpacity = 1;
+				GlyphLayout gameoverLayout = new GlyphLayout(Ld37Game.getGame().getFontHd(), "GAME OVER");
+				Ld37Game.getGame().getFontHd().draw(batch, gameoverLayout, Gdx.graphics.getWidth() / 2 - gameoverLayout.width / 2, Gdx.graphics.getHeight() - Gdx.graphics.getHeight() * 0.2f);
+				
+				GlyphLayout trialsLeftLayout = new GlyphLayout(Ld37Game.getGame().getFontHd(), (GAMES_TO_WIN - score) + " trials left.");
+				Ld37Game.getGame().getFontHd().draw(batch, trialsLeftLayout, Gdx.graphics.getWidth() / 2 - trialsLeftLayout.width / 2, Gdx.graphics.getHeight() - Gdx.graphics.getHeight() * 0.35f);
+				
+				GlyphLayout retryLayout = new GlyphLayout(Ld37Game.getGame().getFontHd(), "CLICK to Retry Life");
+				Ld37Game.getGame().getFontHd().draw(batch, retryLayout, Gdx.graphics.getWidth() / 2 - retryLayout.width / 2, Gdx.graphics.getHeight() - Gdx.graphics.getHeight() * 0.50f);
+				
+				if (Gdx.input.justTouched())
+					reset();
+			}
+		}
 		
 		batch.end();
 		switch (gameState){
@@ -276,6 +307,8 @@ public class RoomScreen extends ScreenAdapter implements ld_minibase.GameEndHand
 	public void reset () {
 		waterHeightGoal = 0;
 		score = 0;
+	    gameOverOpacity = 0;
+	    gameover = false;
 	}
 	
 }
